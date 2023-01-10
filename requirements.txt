@@ -1,0 +1,6 @@
+torch==1.9.0
+numpy==1.19.5
+tqdm==4.62.2
+matplotlib==3.3.4
+regex==2022.10.31
+opencv-python==4.3.0.38
