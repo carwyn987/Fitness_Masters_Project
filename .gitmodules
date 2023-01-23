@@ -1,0 +1,3 @@
+[submodule "RINDNet"]
+	path = RINDNet
+	url = https://github.com/MengyangPu/RINDNet.git
