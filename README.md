@@ -21,7 +21,8 @@ conda activate hypertrophy
 ```
 pip3 install -r requirements.txt
 ```
-
+5. Install ipykernel for running ipynb files
+conda install -n hypertrophy ipykernel --update-deps --force-reinstall
 
 
 ## Dated Notes:
