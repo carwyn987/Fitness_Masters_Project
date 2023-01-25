@@ -6,7 +6,7 @@ It also provides a unified interfact for tracking gym progress.
 
 ## Installation
 
-This project is implemented in python 3.6 and torch 1.9.0. Follow these steps to setup your environment:
+This project is implemented in python 3.7 and torch 1.13.0. Follow these steps to setup your environment:
 
 1. [Download and install Conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html "Download and install Conda")
 2. Create a Conda environment with Python 3.7
