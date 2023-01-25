@@ -21,7 +21,8 @@ conda activate hypertrophy
 ```
 pip3 install -r requirements.txt
 ```
-
+5. Install ipykernel for running ipynb files
+conda install -n hypertrophy ipykernel --update-deps --force-reinstall
 
 
 ## Dated Notes:
@@ -37,11 +38,16 @@ To match two corresponding image regions, the following structure was chosen:
 
 We will still have to see and compare each individual and combined efforts to make a decision for production use.
 
-
-
 ### 01/23/23
 
-Goal today is to use 1. and 2. references to implement the naive Mask R-CNN and GrabCut image segmentation method
+Goal today is to use 1. and 2. references to implement the naive Mask R-CNN and GrabCut image segmentation method.
+Completed the GrabCut implementation. Performance seems solid and relatively accurate but blocky outline.
+Goal for tomorrow is to test robustness.
+
+### 01/24/23
+
+Testing robustness via a shell script and .py file to use GrabCut on a static image, but varying the bounding box initialization. They all capture the leg quite well, but the borders shift and move around significantly enough to where it is not good enough for this project.
+The next step is to see if I can improve the edge precision with R-CNN.
 
 ## Next Steps:
 
