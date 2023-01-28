@@ -24,6 +24,22 @@ pip3 install -r requirements.txt
 5. Install ipykernel for running ipynb files
 conda install -n hypertrophy ipykernel --update-deps --force-reinstall
 
+6. For Mask R-CNN:
+
+pip install Cython
+pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
+pip install pycocotools
+
+pip uninstall keras -y
+pip uninstall keras-nightly -y
+pip uninstall keras-Preprocessing -y
+pip uninstall keras-vis -y
+pip uninstall tensorflow -y
+pip uninstall h5py -y
+
+pip install tensorflow==1.13.1
+pip install keras==2.0.8
+pip install h5py==2.10.0
 
 ## Dated Notes:
 
