@@ -6,6 +6,8 @@ opencv-python==4.3.0.38
 tensorflow
 tensorflow-datasets
 scipy
+scikit-learn
+scikit-image
 torchvision
 tensorboardX
 torch==1.13.1
