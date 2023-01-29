@@ -71,6 +71,7 @@ The next step is to see if I can improve the edge precision with R-CNN.
 ### 01/27/23 - 01/29/23
 
 Setting up environemnt, pulling in submodule, and testing R-CNN on our unique dataset.
+I have successfully set up the testing environment. I still need to download original RCNN training set if I wish to train RCNN from scratch.
 
 ## Next Steps:
 
