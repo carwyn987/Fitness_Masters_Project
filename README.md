@@ -41,6 +41,9 @@ pip install tensorflow==1.13.1
 pip install keras==2.0.8
 pip install h5py==2.10.0
 
+pip3 install imgaug
+sudo apt-get install python3-tk
+
 ## Dated Notes:
 
 ### 01/22/23
