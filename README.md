@@ -68,10 +68,15 @@ Goal for tomorrow is to test robustness.
 Testing robustness via a shell script and .py file to use GrabCut on a static image, but varying the bounding box initialization. They all capture the leg quite well, but the borders shift and move around significantly enough to where it is not good enough for this project.
 The next step is to see if I can improve the edge precision with R-CNN.
 
-### 01/27/23 - 01/29/23
+### 01/27/23 - 01/28/23
 
 Setting up environemnt, pulling in submodule, and testing R-CNN on our unique dataset.
 I have successfully set up the testing environment. I still need to download original RCNN training set if I wish to train RCNN from scratch.
+
+### 01/29/23
+
+Tested RCNN upon images of a leg. Unfortunately, it was trained to identify objects that are seen in a standard environment from the human perspective, such as chairs, people, etc, but not anatomy of humans. Therefore, my plan for next steps is to create a small leg and arm dataset, labelled and masked. Then I will apply transformations such as jitter, rotation, scaling, etc. and train Mask RCNN (with frozen layers except last layer) upon this dataset. Hopefully this will resolve this issue. Then I will test mixing GrabCut and Mask RCNN to get a final accurate estimate.
+
 
 ## Next Steps:
 
