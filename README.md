@@ -75,7 +75,7 @@ I have successfully set up the testing environment. I still need to download ori
 
 ### 01/29/23
 
-Tested RCNN upon images of a leg. Unfortunately, it was trained to identify objects that are seen in a standard environment from the human perspective, such as chairs, people, etc, but not anatomy of humans. Therefore, my plan for next steps is to create a small leg and arm dataset, labelled and masked. Then I will apply transformations such as jitter, rotation, scaling, etc. and train Mask RCNN (with frozen layers except last layer) upon this dataset. Hopefully this will resolve this issue. Then I will test mixing GrabCut and Mask RCNN to get a final accurate estimate.
+Tested RCNN upon images of a leg. Unfortunately, it was trained to identify objects that are seen in a standard environment from the human perspective, such as chairs, people, etc, but not anatomy of humans. Therefore, my plan for next steps is to create a small leg and arm dataset, labelled and masked. Then I will apply transformations such as jitter, rotation, scaling, lighting, dimming, etc. and train Mask RCNN (with frozen layers except last layer) upon this dataset. Hopefully this will resolve this issue. Then I will test mixing GrabCut and Mask RCNN to get a final accurate estimate.
 
 
 ## Next Steps:
