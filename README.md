@@ -44,6 +44,11 @@ pip install h5py==2.10.0
 pip3 install imgaug
 sudo apt-get install python3-tk
 
+## Commands to Run:
+
+$ python -m Test.mask_rcnn.mask_rcnn
+$ python3 Mask_RCNN/samples/coco/coco.py train --dataset=Mask_RCNN/samples/coco --model=Mask_RCNN/samples/coco/mask_rcnn_coco.h5
+
 ## Dated Notes:
 
 ### 01/22/23
@@ -77,6 +82,10 @@ I have successfully set up the testing environment. I still need to download ori
 
 Tested RCNN upon images of a leg. Unfortunately, it was trained to identify objects that are seen in a standard environment from the human perspective, such as chairs, people, etc, but not anatomy of humans. Therefore, my plan for next steps is to create a small leg and arm dataset, labelled and masked. Then I will apply transformations such as jitter, rotation, scaling, lighting, dimming, etc. and train Mask RCNN (with frozen layers except last layer) upon this dataset. Hopefully this will resolve this issue. Then I will test mixing GrabCut and Mask RCNN to get a final accurate estimate.
 
+### 02/01/23
+
+Today I will set up the training of RCNN. Currently, not only are the directory submodule paths inaccurate, but I do not have the correct datasets.
+When running inspect_data.ipynb, it is clear that not all the annotations for the training set line up to the coco images. Therefore, the code is erroring - note that I am running it with the 2014 dataset. Todo: Implement filtering for annotations such that at least one image matches.
 
 ## Next Steps:
 
@@ -85,9 +94,10 @@ Tested RCNN upon images of a leg. Unfortunately, it was trained to identify obje
 3. Decide how to improve model, if it is acceptable, and if so, move onto transforming the segmented images to match eachothers outline.
 4. Check out 2D deformation image matching algorithms, however use matching edge points rather than features and descriptors.
 
-
 ## References:
 
 1. https://pyimagesearch.com/2020/07/27/opencv-grabcut-foreground-segmentation-and-extraction/ 
 2. https://pyimagesearch.com/2020/09/28/image-segmentation-with-mask-r-cnn-grabcut-and-opencv/ 
 3. https://davis.wpi.edu/~matt/courses/morph/2d.htm 
+4. https://github.com/MengyangPu/RINDNet 
+5. https://github.com/matterport/Mask_RCNN 
