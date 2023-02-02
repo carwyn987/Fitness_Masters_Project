@@ -5,7 +5,15 @@ logs/
 results/
 temp/
 test/
-samples/
+samples/images/
+samples/coco/images/
+samples/coco/test2014/
+samples/coco/train2014/
+samples/coco/labels/
+samples/coco/val2014/
+samples/coco/annotations/*
+samples/coco/annotations/.*
+samples/coco/annotations/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
