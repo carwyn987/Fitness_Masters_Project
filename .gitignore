@@ -2,3 +2,7 @@ Media/
 RINDNet/data
 RINDNet/
 Mask_RCNN/samples/coco/annotations/
+
+# LabPicVision
+Test/LabPicVision/Data/
+Test/LabPicVision/LabPicsV1.zip
