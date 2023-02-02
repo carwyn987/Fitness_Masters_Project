@@ -4,5 +4,6 @@ RINDNet/
 Mask_RCNN/samples/coco/annotations/
 
 # LabPicVision
-Test/LabPicVision/Data/
-Test/LabPicVision/LabPicsV1.zip
+Test/LapPicVision/Data/
+Test/LapPicVision/LabPicsV1.zip
+Test/LapPicVision/Data/

@@ -6,7 +6,6 @@ opencv-python==4.3.0.38
 tensorflow
 tensorflow-datasets
 scipy
-coco
 scikit-learn
 scikit-image
 torchvision
@@ -15,3 +14,4 @@ torch==1.13.1
 torchaudio==0.13.1
 torchvision==0.14.1
 typing-extensions==4.4.0
+pandas
