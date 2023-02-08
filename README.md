@@ -91,6 +91,10 @@ When running inspect_data.ipynb, it is clear that not all the annotations for th
 
 Did research into simpler image segmentation algorithms, found tf image segmentation package, and tested. Unfortunately, (1) the LabPic dataset is incomplete and (2) not representative of my dataset. Therefore, I am going to build a tool for segmenting images and creating a dataset efficiently, train the model on my own dataset, and use this as a main finding of my research project. Also, I have been exploring EDA on the file input types. 
 
+### 02/07/23
+
+Have been collecting a dataset. Parameters for the dataset include having a variety of images, angles, backgrounds, clothing apparel, shadows, and anatomical positions. I plan to augment the dataset after applying a mask, by rotation, and zoom. Perhaps I will also request a black or asian friend to assist me in getting more data to accomodate more diverse customers. The next step is to complete the masking code. The project results may turn into an interactive tool for preparing, and labeling a mask segmentation dataset.
+
 ## Next Steps:
 
 1. Create a sample dataset of appendeges and muscle groups. Should be at least 50 images.
