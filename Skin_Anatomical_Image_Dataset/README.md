@@ -6,6 +6,6 @@
  - original_images_concat - rather than spliiting on images, split on image and mask, so there are two folders only inside. This is used for the Simple training of the torchvision segmentation network.
  - via_custom_annotations... - provides supporting project documents for reloading current annotations and images into the VIA tool.
  - via_install - the base folder containing VIA scripts
- - maskGen.py - slightly modified version of the project from https://towardsdatascience.com/generating-image-segmentation-masks-the-easy-way-dd4d3656dbd1 which fixes a few issues with mask channels and dimensions (existing architecture assumed constant  square image size). This creates the image dataset in images/.
- - maskGenSimple.py - same as maskGen.py, but formats outputs differently and in simple_image_config/ rather than images/.
+ - maskGen.py - slightly modified version of the project from https://towardsdatascience.com/generating-image-segmentation-masks-the-easy-way-dd4d3656dbd1 which fixes a few issues with mask channels and dimensions (existing architecture assumed constant  square image size). This creates the image dataset in images/. Nonidempotent operation. Must delete all contents of images/ and copy all images into the newly empty directory.
+ - maskGenSimple.py - same as maskGen.py, but formats outputs differently and in simple_image_config/ rather than images/. simple_image_config/ directory must be deleted before this runs.
  - user_segment.py - depreciated self-coded segmentor. Idea was to use this to open an image, draw a mask, and save the mask. I found VIA before this was developed.
