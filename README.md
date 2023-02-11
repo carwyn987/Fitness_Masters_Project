@@ -95,6 +95,10 @@ Did research into simpler image segmentation algorithms, found tf image segmenta
 
 Have been collecting a dataset. Parameters for the dataset include having a variety of images, angles, backgrounds, clothing apparel, shadows, and anatomical positions. I plan to augment the dataset after applying a mask, by rotation, and zoom. Perhaps I will also request a black or asian friend to assist me in getting more data to accomodate more diverse customers. The next step is to complete the masking code. The project results may turn into an interactive tool for preparing, and labeling a mask segmentation dataset.
 
+### 02/10/23
+
+After a few days off for interviews, I am back to the project. Using this source https://towardsdatascience.com/generating-image-segmentation-masks-the-easy-way-dd4d3656dbd1 I am creating a masked image dataset via "VIA" (VGG Image Annotator) and then trying a few options. (1) adding the dataset to the current dataset, (2) fine tuning the model by resetting (final layer) or freezing previous layers, (3) training a whole new model on this smaller dataset (overfitting issues?). The current network architecture was taken from torchvision models segmentation.
+
 ## Next Steps:
 
 1. Create a sample dataset of appendeges and muscle groups. Should be at least 50 images.
