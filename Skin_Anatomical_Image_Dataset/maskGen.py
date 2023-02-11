@@ -69,7 +69,7 @@ for itr in file_bbs:
     # print("SRC: ", to_save_folder)
     print(os.path.join(to_save_folder, "images", to_save_folder.split('/')[-1] + ".jpg"))
     img = cv2.imread(os.path.join(to_save_folder, "images", to_save_folder.split('/')[-1] + ".jpg"))
-    MASK_HEIGHT, MASK_WIDTH, channels = img.shape
+    MASK_WIDTH, MASK_HEIGHT, channels = img.shape
     print(MASK_HEIGHT, MASK_WIDTH, channels)
 
 
@@ -82,9 +82,9 @@ for itr in file_bbs:
         continue
     count += 1
     cv2.fillPoly(mask, [arr], color=(255))
-    if count < 10:
-        cv2.imshow('image',mask)
-        cv2.waitKey(0)
+    # if count < 10:
+    #     cv2.imshow('image',mask)
+    #     cv2.waitKey(0)
     
     if len(num_masks) > 1:
     	cv2.imwrite(os.path.join(mask_folder, itr.replace("*", "_") + ".png") , mask)    
