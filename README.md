@@ -99,6 +99,10 @@ Have been collecting a dataset. Parameters for the dataset include having a vari
 
 After a few days off for interviews, I am back to the project. Using this source https://towardsdatascience.com/generating-image-segmentation-masks-the-easy-way-dd4d3656dbd1 I am creating a masked image dataset via "VIA" (VGG Image Annotator) and then trying a few options. (1) adding the dataset to the current dataset, (2) fine tuning the model by resetting (final layer) or freezing previous layers, (3) training a whole new model on this smaller dataset (overfitting issues?). The current network architecture was taken from torchvision models segmentation.
 
+### 02/11/23+
+
+I have decided that dating notes about my progress is insignificant, as it simply abstracts the existing functionality out of commit logs. Futher notes can simply be understood by checking the git commit history.
+
 ## Next Steps:
 
 1. Create a sample dataset of appendeges and muscle groups. Should be at least 50 images.
