@@ -117,10 +117,42 @@ I have decided that dating notes about my progress is insignificant, as it simpl
 3. Decide how to improve model, if it is acceptable, and if so, move onto transforming the segmented images to match eachothers outline.
 4. Check out 2D deformation image matching algorithms, however use matching edge points rather than features and descriptors.
 
-## References:
+## References for Project Construction:
 
 1. https://pyimagesearch.com/2020/07/27/opencv-grabcut-foreground-segmentation-and-extraction/ 
 2. https://pyimagesearch.com/2020/09/28/image-segmentation-with-mask-r-cnn-grabcut-and-opencv/ 
 3. https://davis.wpi.edu/~matt/courses/morph/2d.htm 
 4. https://github.com/MengyangPu/RINDNet 
 5. https://github.com/matterport/Mask_RCNN 
+
+## Background References:
+
+1. Saltin, B. J. A. J., Gagge, A. P., & Stolwijk, J. A. (1968). Muscle temperature during submaximal exercise in man. Journal of applied physiology, 25(6), 679-688.
+ > The authors Bengt Saltin et al. performed research on the topic of muscle temperature during submaximal exercise at the John B. Pierce Laboratory which specializes in studying physiology and health in the modern environment. The researchers had subjects perform steady state cardio on a stationary cycling machine. While exercising, they measured core temperature, average skin temperature over the entire body using IR, and intramuscular temperature of the legs. The findings were that in submaximal steady state exercise, skin temperature behaved inverse to that of the muscle temperature measurements with the thermocouples. As ambient temperature increased however, the relationship did not hold, and the skin temperature was concave before plateauing above the initial skin temperature. Another interesting finding was that the difference between the temperature at differing depths of thermocouple-needle measurements diminished as workload increased. Note that the muscles were measured to vary three degrees celsius from baseline to the converged muscle temperature.
+
+2. Priego Quesada, J. I., Carpes, F. P., Bini, R. R., Salvador Palmer, R., Pérez-Soriano, P., & Cibrián Ortiz de Anda, R. M. (2015). Relationship between skin temperature and muscle activation during incremental cycle exercise. Journal of Thermal Biology, 48, 28–35. https://doi.org/10.1016/j.jtherbio.2014.12.005
+ > A group of researchers primarily based in Valencia, Spain studied the effects on skin temperature by cycling exercise, primarily muscles in the quadriceps. The study found that (1) the localized area of skin over an exercised muscle had a statistically significant increase in temperature, (2) overall activation of the vastus lateralis was inversely related with skin temperature, and (3) low frequency activation of the vastus lateralis had a strong positive correlation with skin temperature. An interesting conclusion was that “Participants with larger overall activation and reduced low frequency component for vastus lateralis activation presented a better adaptive response of their thermoregulatory system by showing fewer changes in skin temperature after incremental cycling test”.
+
+3. Oliveira, U. F. de, Araújo, L. C. de, Andrade, P. R. de, Santos, H. H. dos, Moreira, D. G., Sillero-Quintana, M., & Almeida Ferreira, J. J. de. (2018). Skin temperature changes during muscular static stretching exercise. Journal of Exercise Rehabilitation, 14(3), 451–459. https://doi.org/10.12965/jer.1836056.028
+ > Researchers at the Federal University of Paraíba measured the skin temperatures of subjects over 180 seconds of hamstring stretching using a thermographic camera. There was a statistically significant increase in temperature of about 0.3°C, with changes in temperature during this time being linear. An unrelated observation is that the stress or work done on a muscle may be correlated to the temperature-skin area, rather than any single point of maximal temperature.
+
+
+4. Priego-Quesada, J. I., De la Fuente, C., Kunzler, M. R., Perez-Soriano, P., Hervás-Marín, D., & Carpes, F. P. (2020). Relationship between Skin Temperature, Electrical Manifestations of Muscle Fatigue, and Exercise-Induced Delayed Onset Muscle Soreness for Dynamic Contractions: A Preliminary Study. International Journal of Environmental Research and Public Health, 17(18), 6817. https://doi.org/10.3390/ijerph17186817 
+ > With the knowledge that “during muscle contractions, most of the energy generated is heat (>70%) that is transferred to the skin by conduction between tissues or by convection through capillary blood flow”, researchers performed a correlation analysis between skin temperature during exercise - specifically single arm bicep curls to failure (the other arm acted as a control group) - and muscle fatigue post-workout - 24 hours later. The researchers used a FLIR camera with resolution 320 x 240 after calibration. Delayed Onset Muscle Fatigue (DOMS) was found not to be correlated with skin temperature, or any other quantity measured. The more sets that were performed, the less correlation between skin temperature and repetition existed. Furthermore, the temperature did not continue to rise. Increases were only measured in the first two sets in a declining manner. The third set actually had a decrease in skin temperature recorded. The researchers surmised that this trend may have been caused by sweating, and that the three minute rest period may have caused the trend to exacerbate. This study is relevant to my research project as they use similar equipment, and indicate that more data is required to determine DOMS. The researchers concluded that “Although we considered in our study that the presence of sweat was negligible, it may have affected the temperature responses of the skin during the exercise.”
+Read the related works of this paper as it correlates highly with research topic.
+
+5. da Silva, W., Machado, Á. S., Souza, M. A., Kunzler, M. R., Priego-Quesada, J. I., & Carpes, F. P. (2018). Can exercise-induced muscle damage be related to changes in skin temperature? Physiological Measurement, 39(10), 104007. https://doi.org/10.1088/1361-6579/aae6df
+ > Researchers again used a FLIR camera system with resolution 320 x 240 pixels, and this time tested the hypothesis that there is a correlation between creatine kinase (CK) activity. CK activity “ is widely employed to estimate the magnitude of exercise-induced muscle damage in sports”. The researchers “found that CK and infrared thermography responses to exercise-induced muscle damage are different. At least for exercise of a specific muscle group in untrained participants, skin temperature did not correlate with the creatine kinase activity. Therefore, the use of infrared thermography to predict or monitor muscle damage deserves further attention”. Note that the exercise-induced muscle damage (EIMD) is not necessarily correlated with muscle hypertrophy. While highly cited on the matter, many believe it is possible to grow muscle without such painful indications.
+
+
+Summary of background information
+
+ - Steady state exercise is inversely related to muscle temperature.
+ - Muscle temperature varied three degrees celsius over steady state exercise.
+ - The localized skin over an exercised muscle had a significant increase in temperature
+ - Low frequency activation of the muscle has a strong positive correlation with skin temperature. However, overall activation has an inverse trend.
+ - Stretching has a minimal (0.3๐C) increase in muscle temperature.
+ - Stress or work done on a muscle may be correlated to the temperature-skin area, rather than any single point of maximal temperature.
+ - DOMS does not correlate with skin temperature.
+ - Skin temperature may even decrease with work as sweat impacts readings.
+ - Measuring muscle damage via CK has no measurable correlation with skin temperature.
