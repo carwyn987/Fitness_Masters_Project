@@ -89,7 +89,7 @@ def compute_polar_line(mask, center, saveFile, showprocess=False, save=True):
             cur_pnt = True if singled_mask[search_pnt[0], search_pnt[1]] > 0 else False
             
             if cur_pnt == False and last_pnt == True:
-                leaving_points.append((search_pnt[0], search_pnt[1]))
+                leaving_points.append((search_pnt[0], search_pnt[1], angle))
                 if save:
                     # Modifying the show point breaks the code???
                     cv2.drawMarker(show_mask, (search_pnt[1], search_pnt[0]),(255,0,0), markerType=cv2.MARKER_TRIANGLE_UP, markerSize=20, thickness=3, line_type=cv2.LINE_AA)
@@ -115,7 +115,7 @@ def compute_polar_line(mask, center, saveFile, showprocess=False, save=True):
         try:
             outline.append(leaving_points[0])
         except:
-            outline.append((search_pnt[0], search_pnt[1]))
+            outline.append((search_pnt[0], search_pnt[1], angle))
             pass
 
         angle += 360.0/numrays
@@ -179,8 +179,10 @@ def deform_image(img2, center, m1_edge_pts, m2_edge_pts, fileName):
         ratio = m2_center_dist/m1_center_dist
 
         # print("x: ", (m2_edge_pts[i][0] - m1_edge_pts[i][0]), ", y: ", (m2_edge_pts[i][1] - m1_edge_pts[i][1]))
-        angle = math.radians(math.atan(float((m2_edge_pts[i][0] - m1_edge_pts[i][0]))/(m2_edge_pts[i][1] - m1_edge_pts[i][1])))
+        # angle = math.radians(math.atan(float((m2_edge_pts[i][0] - m1_edge_pts[i][0]))/(m2_edge_pts[i][1] - m1_edge_pts[i][1])))
         # print("Angle: ", math.degrees(angle))
+        angle = math.radians(m1_edge_pts[i][2])
+        # print("Angle: ", angle)
 
         movedby = 0
 
@@ -204,10 +206,10 @@ def deform_image(img2, center, m1_edge_pts, m2_edge_pts, fileName):
                 break
 
 
-            cv2.drawMarker(new_img2, (search_pnt[1], search_pnt[0]),(0,0,255), markerType=cv2.MARKER_TRIANGLE_UP, markerSize=2, thickness=3, line_type=cv2.LINE_AA)
-            cv2.imshow("center", new_img2)
-            cv2.waitKey(30)
-            cv2.destroyAllWindows()
+            # cv2.drawMarker(new_img2, (search_pnt[1], search_pnt[0]),(0,0,255), markerType=cv2.MARKER_TRIANGLE_UP, markerSize=2, thickness=3, line_type=cv2.LINE_AA)
+            # cv2.imshow("center", new_img2)
+            # cv2.waitKey(30)
+            # cv2.destroyAllWindows()
 
             # print("Point: (", scaled_pnt_y, ", ", scaled_pnt_x, ") moved to position ", search_pnt)
 
