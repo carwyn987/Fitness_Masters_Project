@@ -66,7 +66,7 @@ def compute_polar_line(mask, center, saveFile, showprocess=False, save=True):
     singled_mask = mask[:,:,0].squeeze().copy()
 
     # Test 360 "rays" for each mask
-    numrays = 2000 # [1,360)
+    numrays = 1000 # [1,360)
     moveby = 1
 
     outline = []
@@ -166,8 +166,8 @@ def deform_image(img2, center, m1_edge_pts, m2_edge_pts, fileName):
     start = time.perf_counter()
     new_img2 = img2.copy()
 
-    stepsize = 25
-    kernel_width = 10
+    stepsize = 1
+    kernel_width = 5
 
     # Iterate over all angle copies saved
     assert len(m1_edge_pts) == len(m2_edge_pts)
