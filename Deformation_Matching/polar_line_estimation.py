@@ -32,39 +32,42 @@ def resizeImgs(img1, mask1, img2, mask2):
 
     return (img1, mask1, img2, mask2)
 
-def compute_center(mask, saveFile, showprocess=False):
+def compute_center(mask, saveFile, showprocess=False, save=True):
     # Let's take only one layer of the mask
-    layer1 = mask[:,:,0]
+    layer1 = mask[:,:,0].copy()
     layer1[layer1 > 1] = 1
 
     center_coordinates = (int(ndimage.center_of_mass(layer1)[0]), int(ndimage.center_of_mass(layer1)[1]))
 
-    if showprocess:
-        # Show image
-        scl = 1
-        image = cv2.circle(cv2.resize(mask, (mask.shape[0]//scl, mask.shape[0]//scl)), (center_coordinates[0]//scl, center_coordinates[1]//scl), 20, (255, 0, 0), 2)
-    
+    # put circle on image
+    scl = 1
+    image = cv2.circle(cv2.resize(mask, (mask.shape[0]//scl, mask.shape[0]//scl)), (center_coordinates[0]//scl, center_coordinates[1]//scl), 20, (255, 0, 0), 2)
+
+
+    if showprocess:    
         cv2.imshow("center", image)
         cv2.waitKey(1000)
         cv2.destroyAllWindows()
+    
+    if save:
         cv2.imwrite(saveFile, image)
 
     print(center_coordinates)
     return center_coordinates
 
 
-def compute_polar_line(mask, center, saveFile, showprocess=False):
+def compute_polar_line(mask, center, saveFile, showprocess=False, save=True):
 
     print("Starting edge search for image: ", saveFile)
     start = time.perf_counter()
 
     # set masks
-    show_mask = mask
-    mask = mask[:,:,0].squeeze()
+    show_mask = mask.copy()
+    singled_mask = mask[:,:,0].squeeze().copy()
 
     # Test 360 "rays" for each mask
-    numrays = 20000 # [1,360)
-    moveby = 0.5
+    numrays = 2000 # [1,360)
+    moveby = 1
 
     outline = []
 
@@ -81,23 +84,24 @@ def compute_polar_line(mask, center, saveFile, showprocess=False):
         last_pnt = True # true represents in the segmented area
         cur_pnt = True # These two statements are assumptions
         movedby = 0
-        while search_pnt[0] < mask.shape[0] and search_pnt[0] > 0 and search_pnt[1] < mask.shape[1] and search_pnt[1] > 0:
+        while search_pnt[0] < singled_mask.shape[0] and search_pnt[0] > 0 and search_pnt[1] < singled_mask.shape[1] and search_pnt[1] > 0:
             
-            cur_pnt = True if mask[search_pnt[0], search_pnt[1]] > 0 else False
+            cur_pnt = True if singled_mask[search_pnt[0], search_pnt[1]] > 0 else False
             
             if cur_pnt == False and last_pnt == True:
                 leaving_points.append((search_pnt[0], search_pnt[1]))
-                if showprocess:
-                    cv2.drawMarker(show_mask, tuple(search_pnt),(255,0,0), markerType=cv2.MARKER_TRIANGLE_UP, markerSize=20, thickness=3, line_type=cv2.LINE_AA)
+                if save:
+                    # Modifying the show point breaks the code???
+                    cv2.drawMarker(show_mask, (search_pnt[1], search_pnt[0]),(255,0,0), markerType=cv2.MARKER_TRIANGLE_UP, markerSize=20, thickness=3, line_type=cv2.LINE_AA)
             else:
                 if showprocess:
-                    cv2.drawMarker(show_mask, tuple(search_pnt),(0,0,255), markerType=cv2.MARKER_TRIANGLE_UP, markerSize=20, thickness=3, line_type=cv2.LINE_AA)
+                    cv2.drawMarker(show_mask, (search_pnt[1], search_pnt[0]),(0,0,255), markerType=cv2.MARKER_TRIANGLE_UP, markerSize=20, thickness=3, line_type=cv2.LINE_AA)
                 pass
 
             if showprocess:
                 # Show image
                 cv2.imshow("center", show_mask)
-                cv2.waitKey(50)
+                cv2.waitKey(100)
                 cv2.destroyAllWindows()
 
             # Update point location
@@ -114,7 +118,8 @@ def compute_polar_line(mask, center, saveFile, showprocess=False):
             outline.append((search_pnt[0], search_pnt[1]))
             pass
 
-        angle += 360/numrays
+        angle += 360.0/numrays
+        # print("Angle: ", angle)
     
     print("Total time to process image points = ", time.perf_counter() - start)
 
@@ -132,11 +137,27 @@ def compute_polar_line(mask, center, saveFile, showprocess=False):
         cv2.imshow("center", show_mask)
         cv2.waitKey(3000)
         cv2.destroyAllWindows()
+        print("Total time to visualizeimage points = ", time.perf_counter() - start)
+
+    if save:
         cv2.imwrite(saveFile, show_mask)
 
-        print("Total time to visualizeimage points = ", time.perf_counter() - start)
     # print(len(outline))
     return outline
+
+def visualize_pairs(img1, m1_edge_pts, img2, m2_edge_pts):
+
+    img1_cp = img1.copy()
+    img2_cp = img2.copy()
+
+    for i in range(len(m1_edge_pts)):
+        if i%25 == 0:
+            cv2.drawMarker(img1_cp, (m1_edge_pts[i][1], m1_edge_pts[i][0]),(0,0,255), markerType=cv2.MARKER_TRIANGLE_UP, markerSize=20, thickness=3, line_type=cv2.LINE_AA)
+            cv2.drawMarker(img2_cp, (m2_edge_pts[i][1], m2_edge_pts[i][0]),(0,0,255), markerType=cv2.MARKER_TRIANGLE_UP, markerSize=20, thickness=3, line_type=cv2.LINE_AA)
+            # show concat
+            cv2.imshow("center", np.concatenate((img1_cp, img2_cp), axis=1))
+            cv2.waitKey(150)
+            cv2.destroyAllWindows()
 
 # Need to add thermal image
 def deform_image(img2, center, m1_edge_pts, m2_edge_pts, fileName):
@@ -145,18 +166,21 @@ def deform_image(img2, center, m1_edge_pts, m2_edge_pts, fileName):
     start = time.perf_counter()
     new_img2 = img2.copy()
 
-    stepsize = 0.2
+    stepsize = 25
+    kernel_width = 10
 
     # Iterate over all angle copies saved
     assert len(m1_edge_pts) == len(m2_edge_pts)
     for i in tqdm(range(len(m1_edge_pts))):
         # compute ratio:
+        # print("dist: ", m1_edge_pts[i], ", ", center)
         m1_center_dist = dist(m1_edge_pts[i], center)
         m2_center_dist = dist(m2_edge_pts[i], center)
         ratio = m2_center_dist/m1_center_dist
 
-        angle = math.degrees(math.atan2((m2_edge_pts[i][0] - m1_edge_pts[i][0]), (m2_edge_pts[i][1] - m1_edge_pts[i][1])))
-        # print("Angle: ", angle, ", Ratio: ", ratio)
+        # print("x: ", (m2_edge_pts[i][0] - m1_edge_pts[i][0]), ", y: ", (m2_edge_pts[i][1] - m1_edge_pts[i][1]))
+        angle = math.radians(math.atan(float((m2_edge_pts[i][0] - m1_edge_pts[i][0]))/(m2_edge_pts[i][1] - m1_edge_pts[i][1])))
+        # print("Angle: ", math.degrees(angle))
 
         movedby = 0
 
@@ -165,23 +189,25 @@ def deform_image(img2, center, m1_edge_pts, m2_edge_pts, fileName):
         while dist(tuple(search_pnt), center) <= dist(center, m1_edge_pts[i]):
 
             # print(movedby, dist(tuple(search_pnt), center))
-            search_pnt[0] = center[0] + movedby*math.sin(math.radians(angle))
-            search_pnt[1] = center[1] + movedby*math.cos(math.radians(angle))
+            search_pnt[0] = center[0] + movedby*math.sin(angle)
+            search_pnt[1] = center[1] + movedby*math.cos(angle)
 
-            scaled_pnt_y = int(center[0] + movedby*math.sin(math.radians(angle))*ratio)
-            scaled_pnt_x = int(center[1] + movedby*math.cos(math.radians(angle))*ratio)
+            scaled_pnt_y = int(center[0] + movedby*math.sin(angle)*ratio)
+            scaled_pnt_x = int(center[1] + movedby*math.cos(angle)*ratio)
 
             # Update transformed image
             try:
                 new_img2[scaled_pnt_y, scaled_pnt_x] = img2[search_pnt[0], search_pnt[1]]
+                # Do kernel operation
+                new_img2[scaled_pnt_y-(kernel_width//2):scaled_pnt_y+(kernel_width//2), scaled_pnt_x-(kernel_width//2):scaled_pnt_x+(kernel_width//2)] = img2[search_pnt[0]-(kernel_width//2):search_pnt[0]+(kernel_width//2), search_pnt[1]-(kernel_width//2):search_pnt[1]+(kernel_width//2)]
             except:
                 break
 
 
-            # cv2.drawMarker(new_img2, tuple(search_pnt),(0,0,255), markerType=cv2.MARKER_TRIANGLE_UP, markerSize=20, thickness=3, line_type=cv2.LINE_AA)
-            # cv2.imshow("center", new_img2)
-            # cv2.waitKey(30)
-            # cv2.destroyAllWindows()
+            cv2.drawMarker(new_img2, (search_pnt[1], search_pnt[0]),(0,0,255), markerType=cv2.MARKER_TRIANGLE_UP, markerSize=2, thickness=3, line_type=cv2.LINE_AA)
+            cv2.imshow("center", new_img2)
+            cv2.waitKey(30)
+            cv2.destroyAllWindows()
 
             # print("Point: (", scaled_pnt_y, ", ", scaled_pnt_x, ") moved to position ", search_pnt)
 
@@ -215,6 +241,8 @@ if __name__ == "__main__":
 
     m1_edge_pts = compute_polar_line(mask1, center, "computed_images/m1_edges.png")
     m2_edge_pts = compute_polar_line(mask2, center, "computed_images/m2_edges.png")
+
+    # visualize_pairs(img1, m1_edge_pts, img2, m2_edge_pts)
 
     # Now we have the centers, edges, and the lines that connect them. We simply have to "extend" the lines of pixels in one image to the other image.
     deform_image(img1, center, m1_edge_pts, m2_edge_pts, "computed_images/deformed_" + sys.argv[1].split('/')[-1])
