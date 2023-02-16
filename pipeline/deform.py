@@ -268,4 +268,4 @@ if __name__ == "__main__":
     # visualize_pairs(img1, m1_edge_pts, img2, m2_edge_pts)
 
     # Now we have the centers, edges, and the lines that connect them. We simply have to "extend" the lines of pixels in one image to the other image.
-    deform_image(img1, center, m1_edge_pts, m2_edge_pts, thermal1, out + "deformed_" + image_1_path.split('/')[-1], out + "thermal_deformed_" + image_1_path.split('/')[-1])
+    deform_image(img1, center, m1_edge_pts, m2_edge_pts, thermal1, out + "deformed_" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])

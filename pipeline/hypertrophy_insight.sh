@@ -37,3 +37,5 @@ python3 deform.py -img1 "$folder$img1" -mask1 "$mask1" -img2 "$folder$img2" -mas
 # Need to improve the algorithm and mask training. It introduces artifacts to the thermal image, especially when masking is incomplete.
 # Perhaps adding a gaussian blur would help, although it would reduce information.
 # Finally, I need to introduce a thermal difference script to provide insights.
+
+python3 difference.py -thermal1 "${outfolder}thermal_deformed_${thermal1}" -thermal2 "${outfolder}thermal2.png" -out "$outfolder"
