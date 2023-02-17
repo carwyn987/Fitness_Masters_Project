@@ -7,7 +7,12 @@ import numpy as np
 
 source_folder = os.path.join(os.getcwd(), "original_images_concat")
 to_base_folder = os.getcwd()
-json_path = "via_custom_annotations_image_sets_1_2/anatomy_set_json.json" # Relative to root directory
+
+# MODIFY THESE PATHS!
+json_path = "via_custom_annotations_image_sets_1_2_3/anatomy_set2_json.json" # Relative to root directory
+out = "simple_image_config2"
+
+
 count = 0                                           # Count of total images saved
 file_bbs = {}                                       # Dictionary containing polygon coordinates for mask
 MASK_WIDTH = 256				    # Dimensions should match those of ground truth image
@@ -48,7 +53,7 @@ for itr in data:
 print("\nDict size: ", len(file_bbs))
 
 # Make new simple images folder
-new_dir = os.path.join(to_base_folder, "simple_image_config")
+new_dir = os.path.join(to_base_folder, out)
 image_folder = os.path.join(new_dir, "images")
 mask_folder = os.path.join(new_dir, "masks")
 
@@ -64,6 +69,7 @@ for file_name in os.listdir(source_folder):
 # For each entry in dictionary, generate mask and save in correponding 
 # folder
 for itr in file_bbs:
+    # print("itr: ", itr)
     num_masks = itr.split("*")
     to_save_folder = os.path.join(source_folder, num_masks[0])
 
@@ -71,6 +77,9 @@ for itr in file_bbs:
     # print("SRC: ", to_save_folder)
     print(os.path.join(to_save_folder + ".jpg"))
     img = cv2.imread(os.path.join(to_save_folder + ".jpg"))
+    if img is None:
+        print("Image failed to load. Attempting .jpeg extension...")
+        img = cv2.imread(os.path.join(to_save_folder + "jpeg"))
     MASK_WIDTH, MASK_HEIGHT, channels = img.shape
     print(MASK_HEIGHT, MASK_WIDTH, channels)
 
@@ -87,9 +96,14 @@ for itr in file_bbs:
     # if count < 10:
     #     cv2.imshow('image',mask)
     #     cv2.waitKey(0)
+
+    # print("Saving: ", itr)
+    if itr[-1] == ".":
+        itr = itr[0:len(itr)-1]
+    # print("Saving2: ", itr)
     
     if len(num_masks) > 1:
-    	cv2.imwrite(os.path.join(mask_folder, itr.replace("*", "_") + ".png") , mask)    
+        cv2.imwrite(os.path.join(mask_folder, itr.replace("*", "_") + ".png") , mask)    
     else:
         cv2.imwrite(os.path.join(mask_folder, itr + ".png") , mask)
         
