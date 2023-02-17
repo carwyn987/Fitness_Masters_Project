@@ -66,8 +66,8 @@ def compute_polar_line(mask, center, saveFile, showprocess=False, save=True):
     singled_mask = mask[:,:,0].squeeze().copy()
 
     # Test 360 "rays" for each mask
-    numrays = 1000 # [1,360)
-    moveby = 1
+    numrays = 5000 # [1,360)
+    moveby = 0.5
 
     outline = []
 
@@ -166,8 +166,8 @@ def deform_image(img2, center, m1_edge_pts, m2_edge_pts, fileName):
     start = time.perf_counter()
     new_img2 = img2.copy()
 
-    stepsize = 1
-    kernel_width = 5
+    stepsize = 0.7
+    kernel_width = 2
 
     # Iterate over all angle copies saved
     assert len(m1_edge_pts) == len(m2_edge_pts)
@@ -177,12 +177,7 @@ def deform_image(img2, center, m1_edge_pts, m2_edge_pts, fileName):
         m1_center_dist = dist(m1_edge_pts[i], center)
         m2_center_dist = dist(m2_edge_pts[i], center)
         ratio = m2_center_dist/m1_center_dist
-
-        # print("x: ", (m2_edge_pts[i][0] - m1_edge_pts[i][0]), ", y: ", (m2_edge_pts[i][1] - m1_edge_pts[i][1]))
-        # angle = math.radians(math.atan(float((m2_edge_pts[i][0] - m1_edge_pts[i][0]))/(m2_edge_pts[i][1] - m1_edge_pts[i][1])))
-        # print("Angle: ", math.degrees(angle))
         angle = math.radians(m1_edge_pts[i][2])
-        # print("Angle: ", angle)
 
         movedby = 0
 
@@ -211,10 +206,19 @@ def deform_image(img2, center, m1_edge_pts, m2_edge_pts, fileName):
             # cv2.waitKey(30)
             # cv2.destroyAllWindows()
 
-            # print("Point: (", scaled_pnt_y, ", ", scaled_pnt_x, ") moved to position ", search_pnt)
-
             # Update point location
             movedby += stepsize
+
+        # Mask background
+        # while(dist(tuple(search_pnt), center) > dist(center, m1_edge_pts[i])):
+        #     movedby += stepsize
+
+        #     scaled_pnt_y = int(center[0] + movedby*math.sin(angle)*ratio)
+        #     scaled_pnt_x = int(center[1] + movedby*math.cos(angle)*ratio)
+        #     try:
+        #         new_img2[scaled_pnt_y, scaled_pnt_x] = 0
+        #     except:
+        #         break
 
     cv2.imwrite(fileName, new_img2)
     print("Total time to deform = ", time.perf_counter() - start)
