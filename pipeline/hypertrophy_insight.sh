@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while getopts f:i:j:t:u:o: flag
+while getopts f:i:j:t:u:o:m: flag
 do
     case "${flag}" in
         f) folder=${OPTARG};;
@@ -9,6 +9,7 @@ do
         t) thermal1=${OPTARG};;
         u) thermal2=${OPTARG};;
         o) outfolder=${OPTARG};;
+        m) model=${OPTARG};;
     esac
 done
 
@@ -20,8 +21,10 @@ echo "Thermal Image 2: $thermal2";
 echo "Out Folder: $outfolder"
 
 # Run images through model to get segmented view
-python3 segment.py -folder "$folder" -image "$img1" -outfolder "$outfolder" -model "../Test/LapPicVision/models/custom_dataset_p_0.25_25000.torch"
-python3 segment.py -folder "$folder" -image "$img2" -outfolder "$outfolder" -model "../Test/LapPicVision/models/custom_dataset_p_0.25_25000.torch"
+python3 segment.py -folder "$folder" -image "$img1" -outfolder "$outfolder" -model "$folder"
+python3 segment.py -folder "$folder" -image "$img2" -outfolder "$outfolder" -model "$folder"
+
+# Model example: "../Test/LapPicVision/models/custom_dataset_p_0.25_25000.torch"
 
 # Set mask variables
 mask1="${outfolder}Mask_$img1"
