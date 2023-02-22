@@ -224,6 +224,47 @@ def deform_image(img2, center, m1_edge_pts, m2_edge_pts, thermal2, fileName, fil
     print("Total time to deform = ", time.perf_counter() - start)
     pass
 
+def meshDeform():
+    warped = cv2.remap(thermal2_dst,src,dst,cv2.INTER_LINEAR)
+
+# Non-affine transformation
+def cv2Deform(img2, center, m1_edge_pts, m2_edge_pts, thermal2, fileName, fileNameThermal):
+
+    pts_src = m1_edge_pts
+    pts_dst = m2_edge_pts
+
+    print("ex: shape: ", pts_src[0], ", len: ", len(pts_src))
+
+    unzipped_src = list(zip(*pts_src))
+    unzipped_dst = list(zip(*pts_dst))
+    print("unzipped_shape: ", unzipped_src[0], ", len: ", len(unzipped_src))
+
+    reformatted_src = list(zip(unzipped_src[0], unzipped_src[1]))
+    reformatted_dst = list(zip(unzipped_dst[0], unzipped_dst[1]))
+
+    print("reformatted_src shape: ", reformatted_src[0], ", len: ", len(reformatted_src))
+
+    src = np.array(reformatted_src)
+    dst = np.array(reformatted_dst)
+
+    print("srcshape: ", src.shape)
+    
+    h, status = cv2.findHomography(src, dst) # h = transformation matrix
+
+    print("transformation matrix: ", h)
+
+    im_dst = cv2.warpPerspective(img2, h, img2.shape[1::-1])
+    thermal2_dst = cv2.warpPerspective(thermal2, h, img2.shape[1::-1])
+
+    cv2.imshow("center", im_dst)
+    cv2.waitKey(3000)
+    cv2.imshow("center", thermal2_dst)
+    cv2.waitKey(3000)
+    cv2.destroyAllWindows()
+
+    pass
+
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Generate Segmentation Masks.')
@@ -269,3 +310,12 @@ if __name__ == "__main__":
 
     # Now we have the centers, edges, and the lines that connect them. We simply have to "extend" the lines of pixels in one image to the other image.
     deform_image(img1, center, m1_edge_pts, m2_edge_pts, thermal1, out + "deformed_" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])
+    cv2Deform(img1, center, m1_edge_pts, m2_edge_pts, thermal1, out + "deformed_" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])
+
+    # Try this: https://open.win.ox.ac.uk/pages/fsl/fslpy/fsl.transform.nonlinear.html#fsl.transform.nonlinear.DeformationField.__init__
+    # https://pypi.org/project/fslpy/
+    # https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=a863ece2c1c96e2e89c8640bb071cd5b489ae867
+    # https://mathlab.github.io/PyGeM/ffd.html
+    # https://examples.itk.org/src/filtering/imagegrid/warpanimageusingadeformationfield/documentation
+    
+    # meshDeform(img1, center, m1_edge_pts, m2_edge_pts, thermal1, out + "deformed_" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])
