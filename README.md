@@ -4,12 +4,124 @@
 
 Gym interest, and the lengths people are willing to go to get great results, are both rising. However, improving muscle activation is often overlooked, leading the people who are able to stay consistent to sub-optimal results, and unbalanced physiques. We offer a solution to this problem, with our thermal-camera phone application named "TAct" - which stands for thermal activation. It is a non-invasive application that uses thermal imaging to estimate muscle activation, backed by science and as a data-driven solution.
 
-It also provides a unified interfact for tracking gym progress.
+It also provides a unified interface for tracking gym progress.
 
 
-## Current High Level Overview Details
+## High Level Project Planning
 
-![UML-like high-level overview](Media/UML/Hypertrophy.svg?raw=true "Planning Page")
+<figure style="margin-left: auto;
+  margin-right: auto; width: 100%; display: block;">
+    <img
+    src="Media/UML/overview.svg?raw=true"
+    alt="Planning Page">
+    <figcaption><center>Figure 1: Project data flow.</figcaption>
+</figure><br>
+
+### Read Images
+
+First, the user must provide images taken before and after an exercise / set. The following data is required.
+
+1. Camera image **directly** before exercise
+2. Thermal image **directly** before exercise
+3. Camera image **directly** after exercise
+4. Thermal image **directly** after exercise
+5. (Optional) User muscle group designation
+
+*Using a phone-compatible FLIR devide will enable simultaneous capture of camera and thermal images*
+
+See the top and bottom set of images in Figure 2. These are the 'Camera Images' and 'Thermal Images' before (left) and after (right) a quadriceps workout (leg extension). 
+
+<figure style="margin-left: auto;
+  margin-right: auto; width: 50%; display: block;">
+    <img
+    src="Media/UML/loaded_images.png?raw=true"
+    alt="Raw, Segmented, and Thermal Images.">
+    <figcaption><center>Figure 2: Input images (raw and thermal) and segmented images (middle row).</figcaption>
+</figure><br>
+
+### Segment Image
+
+The before and after images must be segmented in order to determine which region of the image is relevant, i.e. skin regions that match. This is a required step for the overall robustness of the model since the shape of body parts varies widely based on image angle, natural deformation, and joint angles.
+
+A few methods were implemented:
+1. GrabCut
+2. RINDNet to extract edged directly
+3. Mask_RCNN
+4. Torchvision segmentation baseline implementation (deeplabv3_resnet50)
+
+All implementations lacked perfect segmentation accuracy and contiguous region selection. For simplicity and a machine learning direction to the project, Torchvisions segmentation baseline was used.
+
+An example of a result from this model is shown in the second row of Figure 2.
+
+### Match Images
+
+Using the computed segmentation maps, naive outlines were computed using an expanding polar coordinate search from an estimated center of mass.
+
+<figure style="margin-left: auto;
+  margin-right: auto; width: 50%; display: block;">
+    <img
+    src="Media/UML/edgeandcentercomputation.png?raw=true"
+    alt="Polar edge search theory (row 1), center computation in practice (row 2), and edge computation in practice (row 3).">
+    <figcaption><center>Figure 3: Polar edge search theory (row 1), center computation in practice (row 2), and edge computation in practice (row 3).</figcaption>
+</figure><br>
+
+### Align and Transform Images
+
+The current approach is to use naive ray scaling via center and matching edge points. Unfortunately, the algorithm generates artifacts in the scaled images, as seen in the raw image (figure 4) and thermal images (figure 5).
+
+<figure style="margin-left: auto;
+  margin-right: auto; width: 50%; display: block;">
+    <img
+    src="Media/UML/visual_deformed.jpeg?raw=true"
+    alt="Naively transformed raw image.">
+    <figcaption><center>Figure 4: Naively transformed raw image.</figcaption>
+</figure><br>
+
+<figure style="margin-left: auto;
+  margin-right: auto; width: 50%; display: block;">
+    <img
+    src="Media/UML/thermal_deformed.png?raw=true"
+    alt="Naively transformed thermal image.">
+    <figcaption><center>Figure 5: Naively transformed thermal image.</figcaption>
+</figure><br>
+
+### Compute Thermal Difference Image
+
+Simply taking the pixel difference between the heatmap thermal images (post-scaling). Smoothing may alleviate the current artifacts, but the true culprit in need of fixing is the transformation algorithm.
+
+<figure style="margin-left: auto;
+  margin-right: auto; width: 50%; display: block;">
+    <img
+    src="Media/UML/dif_img.png?raw=true"
+    alt="Difference thermal image.">
+    <figcaption><center>Figure 6: Difference thermal image.</figcaption>
+</figure><br>
+
+### Generate Insight
+
+This step has not been approached yet, however we can interpret the low quality difference image generated using external information.
+
+<figure style="margin-left: auto;
+  margin-right: auto; width: 90%; display: block;">
+    <img
+    src="Media/UML/insight.png?raw=true"
+    alt="Insights.">
+    <figcaption><center>Figure 7: Insights. Left image from the Cleveland Clinic: https://my.clevelandclinic.org/health/body/22816-quad-muscles.</figcaption>
+</figure><br>
+
+By rotating the image, and applying a blur to reduce visible artifacts, the image can be aligned with an anatomical model. This is shown in figure 7, where both the left and right images show the right quadricep. On the right, we see a thermal difference image. In general, red implies a large positive difference, i.e. increase in temperature, and blue implies a small positive difference, no difference, or negative difference in temperature. 
+
+Using this model, we can see that there is a large temperature increase in the vastus intermedius (center muscle), a small peak of temperature in the vastus medialis, and low to no increase in temperature in the vastus lateralis. Futhermore, although not shown in the anatomical image, there is a temperature increase in the adductors (top right).
+
+Using this information, we can infer that the exercise provided higher activation in the 'inner quads', i.e. the vastus medialis, and adductors, than the 'outer quads', i.e. the vastus lateralis.
+
+In the scenario that this information is presented to you after a set of leg extensions with the intention of working the entire quadriceps, someone looking to build a balanced physique in the quadriceps may decide to angle their legs (point their toes) more inwards in order to more strongly target the vastus medialis.
+
+<br><br>
+
+*For reference, the exercise performed when these images were taken was a quad / leg extension, with external hip rotation, chosen to target the inner quads more. It ended up providing more information than expected, as it shows a surprising amount of activation in the hip adductor.*
+
+<br><br>
 
 ## Installation
 
@@ -29,10 +141,13 @@ conda activate hypertrophy
 pip3 install -r requirements.txt
 ```
 5. Install ipykernel for running ipynb files
+```
 conda install -n hypertrophy ipykernel --update-deps --force-reinstall
+```
 
-6. For Mask R-CNN:
+6. For Mask R-CNN (Not Required):
 
+```
 pip install Cython
 pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
 pip install pycocotools
@@ -50,72 +165,20 @@ pip install h5py==2.10.0
 
 pip3 install imgaug
 sudo apt-get install python3-tk
+```
 
 ## Commands to Run:
 
+```
 $ python -m Test.mask_rcnn.mask_rcnn
 $ python3 Mask_RCNN/samples/coco/coco.py train --dataset=Mask_RCNN/samples/coco --model=Mask_RCNN/samples/coco/mask_rcnn_coco.h5
+```
 
-## Dated Notes:
+## Next Steps: (02/27/23)
 
-### 01/22/23
-
-Currently working on matching the skin regions of two matching images of a body part. For example, let us assume that we have two pictures of the quadriceps muscles; in one the leg is slightly more extended than in the other one, making comparison and henceforth muscle group identification quite challenging. Therefore, the skin regions of the images must match. This step needs to be bulletproof as it is the basis of the entire project.
-
-To match two corresponding image regions, the following structure was chosen:
-1. Use Mask R-CNN to provide an initial "guess" for our object (may have to retrain with the option to specify part of the object in question)
- -- which would be easy enough to augment given the Mask R-CNN training dataset
-2. Use OpenCV's implementation of GrabCut to refine our "guess"
-
-We will still have to see and compare each individual and combined efforts to make a decision for production use.
-
-### 01/23/23
-
-Goal today is to use 1. and 2. references to implement the naive Mask R-CNN and GrabCut image segmentation method.
-Completed the GrabCut implementation. Performance seems solid and relatively accurate but blocky outline.
-Goal for tomorrow is to test robustness.
-
-### 01/24/23
-
-Testing robustness via a shell script and .py file to use GrabCut on a static image, but varying the bounding box initialization. They all capture the leg quite well, but the borders shift and move around significantly enough to where it is not good enough for this project.
-The next step is to see if I can improve the edge precision with R-CNN.
-
-### 01/27/23 - 01/28/23
-
-Setting up environemnt, pulling in submodule, and testing R-CNN on our unique dataset.
-I have successfully set up the testing environment. I still need to download original RCNN training set if I wish to train RCNN from scratch.
-
-### 01/29/23
-
-Tested RCNN upon images of a leg. Unfortunately, it was trained to identify objects that are seen in a standard environment from the human perspective, such as chairs, people, etc, but not anatomy of humans. Therefore, my plan for next steps is to create a small leg and arm dataset, labelled and masked. Then I will apply transformations such as jitter, rotation, scaling, lighting, dimming, etc. and train Mask RCNN (with frozen layers except last layer) upon this dataset. Hopefully this will resolve this issue. Then I will test mixing GrabCut and Mask RCNN to get a final accurate estimate.
-
-### 02/01/23
-
-Today I will set up the training of RCNN. Currently, not only are the directory submodule paths inaccurate, but I do not have the correct datasets.
-When running inspect_data.ipynb, it is clear that not all the annotations for the training set line up to the coco images. Therefore, the code is erroring - note that I am running it with the 2014 dataset. Todo: Implement filtering for annotations such that at least one image matches.
-
-### 02/02/23
-
-Did research into simpler image segmentation algorithms, found tf image segmentation package, and tested. Unfortunately, (1) the LabPic dataset is incomplete and (2) not representative of my dataset. Therefore, I am going to build a tool for segmenting images and creating a dataset efficiently, train the model on my own dataset, and use this as a main finding of my research project. Also, I have been exploring EDA on the file input types. 
-
-### 02/07/23
-
-Have been collecting a dataset. Parameters for the dataset include having a variety of images, angles, backgrounds, clothing apparel, shadows, and anatomical positions. I plan to augment the dataset after applying a mask, by rotation, and zoom. Perhaps I will also request a black or asian friend to assist me in getting more data to accomodate more diverse customers. The next step is to complete the masking code. The project results may turn into an interactive tool for preparing, and labeling a mask segmentation dataset.
-
-### 02/10/23
-
-After a few days off for interviews, I am back to the project. Using this source https://towardsdatascience.com/generating-image-segmentation-masks-the-easy-way-dd4d3656dbd1 I am creating a masked image dataset via "VIA" (VGG Image Annotator) and then trying a few options. (1) adding the dataset to the current dataset, (2) fine tuning the model by resetting (final layer) or freezing previous layers, (3) training a whole new model on this smaller dataset (overfitting issues?). The current network architecture was taken from torchvision models segmentation.
-
-### 02/11/23+
-
-I have decided that dating notes about my progress is insignificant, as it simply abstracts the existing functionality out of commit logs. Futher notes can simply be understood by checking the git commit history.
-
-## Next Steps:
-
-1. Create a sample dataset of appendeges and muscle groups. Should be at least 50 images.
-2. Test our model(s) on the sample dataset.
-3. Decide how to improve model, if it is acceptable, and if so, move onto transforming the segmented images to match eachothers outline.
-4. Check out 2D deformation image matching algorithms, however use matching edge points rather than features and descriptors.
+* Check out other 2D deformation image matching algorithms that will not cause artifacts to be generated.
+  * Research "Triangulated Surface Mesh Deformation"
+* Web server with RESTFul interface, python application (Flask)
 
 ## References for Project Construction:
 
