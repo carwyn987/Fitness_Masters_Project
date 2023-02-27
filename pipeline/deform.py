@@ -22,12 +22,15 @@ def loadImgs(image_1_path, mask_1_path, thermal_1_path, image_2_path, mask_2_pat
 
     # Show images
     scx, scy = 3, 6
-    cv2.imshow('images', np.concatenate(( cv2.resize(np.concatenate((img1,img2), axis=1), (img1.shape[1]//scx, img1.shape[0]//scy)), 
+    concat_img = np.concatenate(( cv2.resize(np.concatenate((img1,img2), axis=1), (img1.shape[1]//scx, img1.shape[0]//scy)), 
                                           cv2.resize(np.concatenate((mask1,mask2), axis=1), (img1.shape[1]//scx, img1.shape[0]//scy)), 
                                           cv2.resize(np.concatenate((thermal1,thermal2), axis=1), (img1.shape[1]//scx, img1.shape[0]//scy))
-                                        ), axis=0))
+                                        ), axis=0)
+
+    cv2.imshow('images', concat_img)
     cv2.waitKey(1500)
     cv2.destroyAllWindows()
+    cv2.imwrite(out + "loaded_images.png", concat_img)
 
     return (img1, mask1, thermal1, img2, mask2, thermal2)
 
