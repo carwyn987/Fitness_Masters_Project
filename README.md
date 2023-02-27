@@ -14,7 +14,7 @@ It also provides a unified interface for tracking gym progress.
     <img
     src="Media/UML/overview.svg?raw=true"
     alt="Planning Page">
-    <figcaption><center>Figure 1: Project data flow.</figcaption>
+    <figcaption>Figure 1: Project data flow.</figcaption>
 </figure><br>
 
 ### Read Images
@@ -35,8 +35,8 @@ See the top and bottom set of images in Figure 2. These are the 'Camera Images' 
   margin-right: auto; width: 50%; display: block;">
     <img
     src="Media/UML/loaded_images.png?raw=true"
-    alt="Raw, Segmented, and Thermal Images.">
-    <figcaption><center>Figure 2: Input images (raw and thermal) and segmented images (middle row).</figcaption>
+    alt="Raw, Segmented, and Thermal Images." width="100%">
+    <figcaption>Figure 2: Input images (raw and thermal) and segmented images (middle row).</figcaption>
 </figure><br>
 
 ### Segment Image
@@ -62,7 +62,7 @@ Using the computed segmentation maps, naive outlines were computed using an expa
     <img
     src="Media/UML/edgeandcentercomputation.png?raw=true"
     alt="Polar edge search theory (row 1), center computation in practice (row 2), and edge computation in practice (row 3).">
-    <figcaption><center>Figure 3: Polar edge search theory (row 1), center computation in practice (row 2), and edge computation in practice (row 3).</figcaption>
+    <figcaption>Figure 3: Polar edge search theory (row 1), center computation in practice (row 2), and edge computation in practice (row 3).</figcaption>
 </figure><br>
 
 ### Align and Transform Images
@@ -74,7 +74,7 @@ The current approach is to use naive ray scaling via center and matching edge po
     <img
     src="Media/UML/visual_deformed.jpeg?raw=true"
     alt="Naively transformed raw image.">
-    <figcaption><center>Figure 4: Naively transformed raw image.</figcaption>
+    <figcaption>Figure 4: Naively transformed raw image.</figcaption>
 </figure><br>
 
 <figure style="margin-left: auto;
@@ -82,7 +82,7 @@ The current approach is to use naive ray scaling via center and matching edge po
     <img
     src="Media/UML/thermal_deformed.png?raw=true"
     alt="Naively transformed thermal image.">
-    <figcaption><center>Figure 5: Naively transformed thermal image.</figcaption>
+    <figcaption>Figure 5: Naively transformed thermal image.</figcaption>
 </figure><br>
 
 ### Compute Thermal Difference Image
@@ -94,7 +94,7 @@ Simply taking the pixel difference between the heatmap thermal images (post-scal
     <img
     src="Media/UML/dif_img.png?raw=true"
     alt="Difference thermal image.">
-    <figcaption><center>Figure 6: Difference thermal image.</figcaption>
+    <figcaption>Figure 6: Difference thermal image.</figcaption>
 </figure><br>
 
 ### Generate Insight
@@ -106,7 +106,7 @@ This step has not been approached yet, however we can interpret the low quality 
     <img
     src="Media/UML/insight.png?raw=true"
     alt="Insights.">
-    <figcaption><center>Figure 7: Insights. Left image from the Cleveland Clinic: https://my.clevelandclinic.org/health/body/22816-quad-muscles.</figcaption>
+    <figcaption>Figure 7: Insights. Left image from the Cleveland Clinic: https://my.clevelandclinic.org/health/body/22816-quad-muscles.</figcaption>
 </figure><br>
 
 By rotating the image, and applying a blur to reduce visible artifacts, the image can be aligned with an anatomical model. This is shown in figure 7, where both the left and right images show the right quadricep. On the right, we see a thermal difference image. In general, red implies a large positive difference, i.e. increase in temperature, and blue implies a small positive difference, no difference, or negative difference in temperature. 
