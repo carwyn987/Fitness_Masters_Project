@@ -67,14 +67,24 @@ Using the computed segmentation maps, naive outlines were computed using an expa
 
 ### Align and Transform Images
 
-The current approach is to use naive ray scaling via center and matching edge points. Unfortunately, the algorithm generates artifacts in the scaled images, as seen in the raw image (figure 4) and thermal images (figure 5).
+A mesh transformation algorithm is the current default. It generates a fantastic transformed thermal image shown in figure 4 below. The current approach uses a small sample of edge points (30 compared to thousands), so it computes much faster and more efficiently.
+
+<figure style="margin-left: auto;
+  margin-right: auto; width: 50%; display: block;">
+    <img
+    src="Media/UML/thermal_deformed2.jpg?raw=true"
+    alt="Naively transformed raw image.">
+    <figcaption>Figure 4: Mesh transformed thermal image.</figcaption>
+</figure><br>
+
+The old approach was to use naive ray scaling via center and matching edge points. Unfortunately, this algorithm generates artifacts in the scaled images, as seen in the raw image (figure 5) and thermal images (figure 6).
 
 <figure style="margin-left: auto;
   margin-right: auto; width: 50%; display: block;">
     <img
     src="Media/UML/visual_deformed.jpeg?raw=true"
     alt="Naively transformed raw image.">
-    <figcaption>Figure 4: Naively transformed raw image.</figcaption>
+    <figcaption>Figure 5: Naively transformed raw image.</figcaption>
 </figure><br>
 
 <figure style="margin-left: auto;
@@ -82,7 +92,7 @@ The current approach is to use naive ray scaling via center and matching edge po
     <img
     src="Media/UML/thermal_deformed.png?raw=true"
     alt="Naively transformed thermal image.">
-    <figcaption>Figure 5: Naively transformed thermal image.</figcaption>
+    <figcaption>Figure 6: Naively transformed thermal image.</figcaption>
 </figure><br>
 
 ### Compute Thermal Difference Image
@@ -94,7 +104,17 @@ Simply taking the pixel difference between the heatmap thermal images (post-scal
     <img
     src="Media/UML/dif_img.png?raw=true"
     alt="Difference thermal image.">
-    <figcaption>Figure 6: Difference thermal image.</figcaption>
+    <figcaption>Figure 7: Difference thermal image.</figcaption>
+</figure><br>
+
+The improved results after updating the deformation algorithm and difference computation is shown in figure 8 below.
+
+<figure style="margin-left: auto;
+  margin-right: auto; width: 50%; display: block;">
+    <img
+    src="Media/UML/dif_img2.png?raw=true"
+    alt="Difference thermal image.">
+    <figcaption>Figure 8: Improved difference thermal image.</figcaption>
 </figure><br>
 
 ### Generate Insight
@@ -106,7 +126,7 @@ This step has not been approached yet, however we can interpret the low quality 
     <img
     src="Media/UML/insight.png?raw=true"
     alt="Insights.">
-    <figcaption>Figure 7: Insights. Left image from the Cleveland Clinic: https://my.clevelandclinic.org/health/body/22816-quad-muscles.</figcaption>
+    <figcaption>Figure 9: Insights. Left image from the Cleveland Clinic: https://my.clevelandclinic.org/health/body/22816-quad-muscles.</figcaption>
 </figure><br>
 
 By rotating the image, and applying a blur to reduce visible artifacts, the image can be aligned with an anatomical model. This is shown in figure 7, where both the left and right images show the right quadricep. On the right, we see a thermal difference image. In general, red implies a large positive difference, i.e. increase in temperature, and blue implies a small positive difference, no difference, or negative difference in temperature. 
