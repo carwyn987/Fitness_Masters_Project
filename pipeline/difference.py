@@ -44,7 +44,7 @@ def computeDif(thermal1, thermal2):
 
 def computeDifference(thermal1, thermal2, out):
     compare = np.concatenate((thermal1, np.zeros((thermal1.shape[0],40,3)), thermal2), axis=1)
-    difImg = thermal2 - thermal1
+    difImg = thermal1 - thermal2
     # difImg = computeDif(thermal1, thermal2)
     
     cv2.imshow("Compare Images", compare)
