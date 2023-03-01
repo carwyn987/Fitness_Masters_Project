@@ -6,6 +6,7 @@ import argparse
 from tqdm import tqdm
 import numpy as np
 from scipy import ndimage
+import skimage
 
 def dist(t1, t2):
     return ((t1[0] - t2[0])**2 + (t1[1] - t2[1])**2)**0.5
@@ -225,10 +226,53 @@ def deform_image(img2, center, m1_edge_pts, m2_edge_pts, thermal2, fileName, fil
     cv2.imwrite(fileName, new_img2)
     cv2.imwrite(fileNameThermal, new_thermal)
     print("Total time to deform = ", time.perf_counter() - start)
-    pass
 
-def meshDeform():
-    warped = cv2.remap(thermal2_dst,src,dst,cv2.INTER_LINEAR)
+"""
+https://scikit-image.org/docs/stable/api/skimage.transform.html#skimage.transform.warp
+https://scikit-image.org/docs/dev/auto_examples/transform/plot_piecewise_affine.html
+https://mail.python.org/pipermail/scikit-image/2016-July/004783.html
+"""
+def meshDeform(img2, center, m1_edge_pts, m2_edge_pts, thermal2, fileName, fileNameThermal):
+    # Take a sample of the edge point pairs
+    sample_size = 30
+    sample_src = []
+    sample_dst = []
+    for i in range(0, len(m1_edge_pts), len(m1_edge_pts) // sample_size):
+        sample_src.append(m2_edge_pts[i])
+        sample_dst.append(m1_edge_pts[i])
+
+    # displacement_mtrx = np.zeros(())
+
+    src_unzpd = list(zip(*sample_src))
+    dst_unzpd = list(zip(*sample_dst))
+
+    src_rows = np.array(src_unzpd[0])
+    src_cols = np.array(src_unzpd[1])
+    src_pts = np.dstack([src_cols.flat, src_rows.flat])[0]
+
+    dst_cols = np.array(dst_unzpd[1])
+    dst_rows = np.array(dst_unzpd[0])
+    dst_pts = np.vstack([dst_cols, dst_rows]).T
+
+    tform = skimage.transform.PiecewiseAffineTransform()
+    tform.estimate(src_pts, dst_pts)
+
+    out = skimage.transform.warp(img2, tform)*255
+    out_thermal = (skimage.transform.warp(thermal2, tform)*255)
+
+    out = out.astype(np.uint8)
+    out_thermal = out_thermal.astype(np.uint8)
+    
+    print("OUT SHAPE: ", out.shape)
+    print("img2 shape: ", img2.shape)
+    print("range: ", out.min(), ", ", out.max())
+    print("range img2: ", img2.min(), ", ", img2.max())
+
+    cv2.imshow("warped mesh image", np.concatenate((img2*255, out), axis=1))
+    cv2.waitKey(1000)
+    cv2.destroyAllWindows()
+    cv2.imwrite(fileName, out)
+    cv2.imwrite(fileNameThermal, out_thermal)
 
 # Non-affine transformation
 def cv2Deform(img2, center, m1_edge_pts, m2_edge_pts, thermal2, fileName, fileNameThermal):
@@ -259,14 +303,11 @@ def cv2Deform(img2, center, m1_edge_pts, m2_edge_pts, thermal2, fileName, fileNa
     im_dst = cv2.warpPerspective(img2, h, img2.shape[1::-1])
     thermal2_dst = cv2.warpPerspective(thermal2, h, img2.shape[1::-1])
 
-    cv2.imshow("center", im_dst)
-    cv2.waitKey(3000)
-    cv2.imshow("center", thermal2_dst)
-    cv2.waitKey(3000)
-    cv2.destroyAllWindows()
-
-    pass
-
+    # cv2.imshow("center", im_dst)
+    # cv2.waitKey(3000)
+    # cv2.imshow("center", thermal2_dst)
+    # cv2.waitKey(3000)
+    # cv2.destroyAllWindows()
 
 if __name__ == "__main__":
 
@@ -312,13 +353,19 @@ if __name__ == "__main__":
     # visualize_pairs(img1, m1_edge_pts, img2, m2_edge_pts)
 
     # Now we have the centers, edges, and the lines that connect them. We simply have to "extend" the lines of pixels in one image to the other image.
-    deform_image(img1, center, m1_edge_pts, m2_edge_pts, thermal1, out + "deformed_" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])
-    cv2Deform(img1, center, m1_edge_pts, m2_edge_pts, thermal1, out + "deformed_" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])
-
+    
+    # Alternative (polar) Scaling Method
+    # deform_image(img1.copy(), center, m1_edge_pts, m2_edge_pts, thermal1.copy(), out + "deformed_" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])
+    
+    # Alternative (affine) Scaling Method
+    # cv2Deform(img1.copy(), center, m1_edge_pts, m2_edge_pts, thermal1.copy(), out + "deformed_" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])
+    
+    # Best (mesh warp) Scaling Method
+    meshDeform(img1.copy(), center, m1_edge_pts, m2_edge_pts, thermal1.copy(), out + "deformed__" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])
+    
+    
     # Try this: https://open.win.ox.ac.uk/pages/fsl/fslpy/fsl.transform.nonlinear.html#fsl.transform.nonlinear.DeformationField.__init__
     # https://pypi.org/project/fslpy/
     # https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=a863ece2c1c96e2e89c8640bb071cd5b489ae867
     # https://mathlab.github.io/PyGeM/ffd.html
     # https://examples.itk.org/src/filtering/imagegrid/warpanimageusingadeformationfield/documentation
-    
-    # meshDeform(img1, center, m1_edge_pts, m2_edge_pts, thermal1, out + "deformed_" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])
