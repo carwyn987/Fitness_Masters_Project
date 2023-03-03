@@ -26,3 +26,23 @@ Entire pipline directions
 13. Move to pipeline folder. Run hypertrophy pipeline with a command such as the following.
  - ./hypertrophy_insight.sh -f '../Media/Images/original_leg_day/' -i 'FLIR_20220906_104014_048-Visual.jpeg' -j 'FLIR_20220906_103225_633-Visual.jpeg' -t 'FLIR_20220906_104014_048.jpg' -u 'FLIR_20220906_103225_633.jpg' -o 'out/' -m '../Test/LapPicVision/models/full_custom_dataset_p_0.25_25000.torch'
 14. The output image "out/output.png" shows insights made by the pipeline.
+
+
+## Documentation of deformation technique
+
+As found in previous experimentation, deforming the image via a polar expansion technique introduced artifacts. This was likely due to a non 1:1 transformation, as a result of deformation rays overlapping on a pixel granularity much more commonly than when r (radius) was low.
+
+The deformation technique was implemented with the following pseudocode:
+```
+transform = skimage.transform.PiecewiseAffineTransform()
+transform.estimate(source points, destination points)
+out = skimage.transform.warp(image, transform)
+```
+
+The python library skimage was utilized. The basis is to use piecewise affine transformation - a transformation technique that instead of warping the entire image at once, first splits the image into a set of triangles, and then performs affine transformation to each region independently. As defined by the skimage documentation, "Control points are used to define the mapping. The transform is based on a Delaunay triangulation [implemented via scipy.spatial.Delaunay function] of the points to form a mesh. Each triangle is used to find a local affine transform." The source and destination points were computed using the polar search algorithm documented in ../Deformation_Matching.
+
+Sources:
+1. https://github.com/dfdx/PiecewiseAffineTransforms.jl
+2. https://scikit-image.org/docs/stable/auto_examples/transform/plot_piecewise_affine.html
+3. https://scikit-image.org/docs/stable/api/skimage.transform.html#skimage.transform.PiecewiseAffineTransform
+4. 
