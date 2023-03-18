@@ -10,3 +10,5 @@ Test/LapPicVision/models/
 
 # Media
 Media/07_31_22_Back_Thermal_Videos/
+
+Custom_Segmentation/src/__pycache__/
