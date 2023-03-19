@@ -4,6 +4,9 @@ import torch.nn as nn
 import torch.optim as optim
 from tqdm import tqdm
 import numpy as np
+import time
+import cv2
+import matplotlib.pyplot as plt
 
 from src.load import load_and_split
 from src.model import SegmentAE, SegmentUNet
@@ -30,15 +33,18 @@ def main():
     elif args.model == 'SegNet':
         model_json = load_model_json()
         model = SegNet(in_chn=model_json['in_chn'], out_chn=model_json['out_chn'], BN_momentum=model_json['bn_momentum'])
-        train_model(model, train[0], train[1], model_json)
+        train_model(model, train[0], train[1], test[0], test[1], model_json)
 
-def train_model(model, train_data, train_labels, model_json=None):
+def train_model(model, train_data, train_labels, test_data, test_labels, model_json=None):
 
-    epochs = 10
+    epochs = 100
     
     optimizer = optim.SGD(model.parameters(), lr=model_json['learning_rate'], momentum=model_json['sgd_momentum'])
-    loss_fn = nn.CrossEntropyLoss(weight=torch.tensor(model_json['cross_entropy_loss_weights']))
+    # loss_fn = nn.CrossEntropyLoss(weight=torch.tensor(model_json['cross_entropy_loss_weights']))
+    loss_fn = nn.L1Loss()
     loss_save = []
+    test_loss_save = []
+    loss = None
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model.to(device) # cuda()
@@ -46,39 +52,51 @@ def train_model(model, train_data, train_labels, model_json=None):
 
     # Training Loop
     for e in tqdm(range(epochs)):
-        # Because training samples don't fit in memory, do each one individually
-        for i in range(train_data.shape[0]):
-
-            # t = torch.cuda.get_device_properties(0).total_memory
-            r = torch.cuda.memory_reserved(0)
-            a = torch.cuda.memory_allocated(0)
-            f = r-a  # free inside reserved
-            print("1Free inside reserved: ", f, a)
-
-            
-            d = torch.tensor(np.expand_dims(train_data[i], axis=0)).float().to(device)
-            
-            r = torch.cuda.memory_reserved(0)
-            a = torch.cuda.memory_allocated(0)
-            f = r-a  # free inside reserved
-            print("2Free inside reserved: ", f, a)
-
-
-            # optimizer.zero_grad()
-            predict = model(d)
-            # loss = loss_fn(predict)
-            # loss.backward()
-            # optimizer.step()
-            del d, predict
-            torch.cuda.empty_cache()
-
-            r = torch.cuda.memory_reserved(0)
-            a = torch.cuda.memory_allocated(0)
-            f = r-a  # free inside reserved
-            print("3Free inside reserved: ", f, a)
         
-        if e % 10:
-            loss_save.append(0)
+        # Because training samples don't fit in memory, do each one individually
+        for i in range(train_data.shape[0]):            
+            d = torch.tensor(np.expand_dims(train_data[i], axis=0)).float().to(device)
+            optimizer.zero_grad()
+            predict = model(d)
+
+            loss = loss_fn(predict, torch.tensor(np.expand_dims(np.expand_dims(train_labels[i][0,:,:], axis=0), axis=0)).float().to(device))
+            loss_save.append(loss.item())
+            loss.backward()
+            optimizer.step()
+
+            # Memory Optimization
+            # del d, predict
+            # torch.cuda.empty_cache()
+        
+        if e % 10 == 0:
+            loss_save.append(loss.item())
+
+            # Perform test or validation loss:
+            model.eval()
+            with torch.no_grad():
+                average_loss = 0
+                for i in range(test_data.shape[0]):
+                    d = torch.tensor(np.expand_dims(train_data[i], axis=0)).float().to(device)
+                    predict = model(d)
+                    loss = loss_fn(predict, torch.tensor(np.expand_dims(np.expand_dims(train_labels[i][0,:,:], axis=0), axis=0)).float().to(device))
+                    average_loss += loss.item()
+                test_loss_save.append(average_loss/test_data.shape[0])
+            model.train()
+
+
+    fig, ax = plt.subplots( nrows=1, ncols=1 )  # create figure & 1 axis
+    ax.plot(np.arange(len(loss_save)), loss_save)
+    fig.suptitle('Training Loss vs Iteration Curve', fontsize='large')
+    ax.set_xlabel('Training Iteration (Not Epoch)', fontsize='medium')
+    ax.set_ylabel('Training Loss', fontsize='medium')
+    fig.savefig(f'media/training_vs_{epochs}_image_iterations.png')   # save the figure to file
+
+    fig, ax = plt.subplots( nrows=1, ncols=1 )  # create figure & 1 axis
+    ax.plot(np.arange(len(test_loss_save)), test_loss_save)
+    fig.suptitle('Testing Loss vs Iteration Curve', fontsize='large')
+    ax.set_xlabel('v Iteration (Not Epoch)', fontsize='medium')
+    ax.set_ylabel('Testing Loss', fontsize='medium')
+    fig.savefig(f'media/testing_vs_{epochs}_image_iterations.png')   # save the figure to file
 
 if __name__ == "__main__":
     main()

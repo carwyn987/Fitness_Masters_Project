@@ -11,7 +11,7 @@ def load_and_split(folder):
 
     # Just as a thought experiment
     print(f'image data in memory is of size: {data.nbytes}, labels in memory is of size: {labels.nbytes}')
-    print(f'this equates to approximately {(100*(data.nbytes + labels.nbytes)/(64157.8 * 1049000)):8.6f}% of main memory on my machine (should be ~30%)')
+    print(f'this equates to approximately {(100*(data.nbytes + labels.nbytes)/(64157.8 * 1049000)):8.6f}% of main memory on my machine (was ~30% before downsampling)')
 
     return split(data, labels)
     
@@ -37,31 +37,35 @@ def load(folder):
     num_images = len(img_names)
     print(f'Loading {num_images} observations.')
 
+    scaleFactor = 32
     h,w,c = cv2.imread(img_names[0], cv2.IMREAD_COLOR).shape
     print(f'Each image has width: {w}, height: {h}, channels: {c}')
 
-    data = np.zeros([num_images,c,h,w], dtype=float)
+    data = np.zeros([num_images,c,h//scaleFactor,w//scaleFactor], dtype=float)
+    print(f'New data size is (width, height): {(data.shape[3], data.shape[2])}')
 
     print("Loading images")
     for i in tqdm(range(num_images)):
+        img = cv2.normalize(cv2.resize(cv2.imread(img_names[i], cv2.IMREAD_COLOR), (data.shape[3], data.shape[2]), interpolation = cv2.INTER_AREA), None, 0, 1.0, cv2.NORM_MINMAX, dtype=cv2.CV_32F)
         try:
-            data[i] = torch.tensor(np.moveaxis(cv2.imread(img_names[i], cv2.IMREAD_COLOR), 2,0))
+            data[i] = np.moveaxis(img, 2,0)
         except ValueError:
             try:
-                data[i] = torch.tensor(np.swapaxes(np.moveaxis(cv2.imread(img_names[i], cv2.IMREAD_COLOR), 2,0), 1,2))
+                data[i] = np.swapaxes(np.moveaxis(img, 2,0), 1,2)
             except:
                 raise RuntimeError('Input image size is ambiguous and is not universal.')
     
     # Create tensor to hold labels
     mask_names = [os.path.join(mask_data_folder, name.rsplit('/', 1)[-1].rsplit('.', 1)[0] + ".png") for name in img_names]
-    labels = np.zeros([num_images,c,h,w], dtype=float)
+    labels = np.zeros([num_images,c,h//scaleFactor,w//scaleFactor], dtype=float)
     print("Loading labels")
     for i in tqdm(range(num_images)):
+        img = cv2.normalize(cv2.resize(cv2.imread(mask_names[i], cv2.IMREAD_COLOR), (data.shape[3], data.shape[2]), interpolation = cv2.INTER_AREA), None, 0, 1.0, cv2.NORM_MINMAX, dtype=cv2.CV_32F)
         try:
-            labels[i] = torch.tensor(np.moveaxis(cv2.imread(mask_names[i], cv2.IMREAD_COLOR), 2,0))
+            labels[i] = np.moveaxis(img, 2,0)
         except ValueError:
             try:
-                labels[i] = torch.tensor(np.swapaxes(np.moveaxis(cv2.imread(mask_names[i], cv2.IMREAD_COLOR), 2,0), 1,2))
+                labels[i] = np.swapaxes(np.moveaxis(img, 2,0), 1,2)
             except:
                 raise RuntimeError('Input mask size is ambiguous and is not universal.')
 

@@ -99,12 +99,8 @@ class SegNet(nn.Module):
 
         #ENCODE LAYERS
         #Stage 1
-        print("Original size: ", x.shape)
-        x = F.relu(self.BNEn11(self.ConvEn11(x))) 
-        print("After size: ", x.shape)
-        print('4: ', torch.cuda.memory_allocated())
+        x = F.relu(self.BNEn11(self.ConvEn11(x)))
         x = F.relu(self.BNEn12(self.ConvEn12(x))) 
-        print('5: ', torch.cuda.memory_allocated())
         x, ind1 = self.MaxEn(x)
         size1 = x.size()
 
@@ -164,7 +160,7 @@ class SegNet(nn.Module):
         x = F.relu(self.BNDe12(self.ConvDe12(x)))
         x = self.ConvDe11(x)
 
-        x = F.softmax(x, dim=1)
+        # x = F.softmax(x, dim=1)
 
         return x
     

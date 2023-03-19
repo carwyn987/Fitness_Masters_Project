@@ -6,6 +6,11 @@ This folder contains self-written code for segmenting images using a CNN and PyT
 
 $ python3 train.py
 
+## Info:
+ - Swapped out the classification step (softmax) and crossentropyloss for an l1loss (no classification, just regressing the image segmentation)
+ - Increased learning rate from 0.005 to 0.025
+ - TODO: create a file for graphing and abstract out the matplotlib and image saving.
+
 
 Observations:
 1. After loading my custom curated dataset of 69 images and masks, 30 percent of main memory is filled. Therefore, to keep the training speeds higher, a maximum of about 200 observations (images and labels) will keep the program from using swap.
