@@ -28,13 +28,15 @@ def main():
     
     # Create model + parameters
 
-    epochs = 100
+    epochs = 500
     train_losses = []
     test_losses = []
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     if args.model == 'AE':
         model = SegmentAE()
+        model_json = load_model_json()
+        train_losses, test_losses = train_model(model, train[0], train[1], test[0], test[1], epochs, device, model_json)
     elif args.model == 'UNet':
         model = SegmentUNet()
     elif args.model == 'SegNet':
@@ -43,10 +45,10 @@ def main():
         train_losses, test_losses = train_model(model, train[0], train[1], test[0], test[1], epochs, device, model_json)
 
     # Evaluate model
-    plot_loss(train_losses, 'Training Loss vs Iteration Curve', 'Training Iteration (Not Epoch)', 'Training Loss', filename=f'media/training_vs_{epochs}_image_iterations.png')
-    plot_loss(test_losses, 'Testing Loss vs Iteration Curve', 'Iteration (Not Epoch)', 'Testing Loss', filename=f'media/testing_vs_{len(test_losses)}_image_iterations.png')
+    plot_loss(train_losses, 'Training Loss vs Iteration Curve', 'Training Iteration (Not Epoch)', 'Training Loss', filename=f'media/training_vs_{epochs}_image_iterations_{args.model}.png')
+    plot_loss(test_losses, 'Testing Loss vs Iteration Curve', 'Iteration (Not Epoch)', 'Testing Loss', filename=f'media/testing_vs_{len(test_losses)}_image_iterations_{args.model}.png')
 
-    eval_sample(model, test, device, folder_to_create="sample_test_predictions/")
+    eval_sample(model, test, device, folder_to_create=f"sample_test_predictions_{args.model}/")
 
 def train_model(model, train_data, train_labels, test_data, test_labels, epochs, device, model_json=None):
     
