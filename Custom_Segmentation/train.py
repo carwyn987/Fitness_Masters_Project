@@ -28,17 +28,19 @@ def main():
     
     # Create model + parameters
 
-    epochs = 500
+    epochs = 1000
     train_losses = []
     test_losses = []
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     if args.model == 'AE':
-        model = SegmentAE()
         model_json = load_model_json()
+        model = SegmentAE()
         train_losses, test_losses = train_model(model, train[0], train[1], test[0], test[1], epochs, device, model_json)
     elif args.model == 'UNet':
+        model_json = load_model_json()
         model = SegmentUNet()
+        train_losses, test_losses = train_model(model, train[0], train[1], test[0], test[1], epochs, device, model_json)
     elif args.model == 'SegNet':
         model_json = load_model_json()
         model = SegNet(in_chn=model_json['in_chn'], out_chn=model_json['out_chn'], BN_momentum=model_json['bn_momentum'])
@@ -53,8 +55,8 @@ def main():
 def train_model(model, train_data, train_labels, test_data, test_labels, epochs, device, model_json=None):
     
     optimizer = optim.SGD(model.parameters(), lr=model_json['learning_rate'], momentum=model_json['sgd_momentum'])
-    # loss_fn = nn.CrossEntropyLoss(weight=torch.tensor(model_json['cross_entropy_loss_weights']))
     loss_fn = nn.L1Loss()
+    # loss_fn = nn.BCELoss()
     loss_save = []
     test_loss_save = []
     loss = None

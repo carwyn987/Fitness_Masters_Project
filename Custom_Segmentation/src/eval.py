@@ -22,6 +22,10 @@ def eval_sample(model, test_data, device, folder_to_create, sample_size=10):
     model.eval()
     segmented_imgs = [np.squeeze(model(torch.tensor(np.expand_dims(img, axis=0)).float().to(device)).detach().cpu().numpy()) for img in imgs]
     model.train()
+
+    # for i in range(len(segmented_imgs)):
+    #     segmented_imgs[i][segmented_imgs[i]>=0.1] = 1
+    #     segmented_imgs[i][segmented_imgs[i]<0.1] = 0
     
     # Make output directory
 

@@ -57,8 +57,48 @@ class SegmentAE(torch.nn.Module):
 class SegmentUNet(torch.nn.Module):
     def __init__(self):
         super().__init__()
+        
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=2, padding=2) # no dilation
+        self.pool1 = nn.MaxPool2d(2, stride=2, return_indices=True) # using 2d rather than 3d should preserve the number of channels
+        self.batchNorm1 = nn.BatchNorm2d(16)
 
-        pass
-    
+        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=2, stride=2, padding=2)
+        self.pool2 = nn.MaxPool2d(2, stride=2, return_indices=True) # using 2d rather than 3d should preserve the number of channels
+        self.batchNorm2 = nn.BatchNorm2d(32)
+
+        self.deconv1 = nn.ConvTranspose2d(in_channels=32, out_channels=16, kernel_size=2, stride=2, padding=2, output_padding=0)
+        self.depool = nn.MaxUnpool2d(2, stride=2)
+
+        self.deconv2 = nn.ConvTranspose2d(in_channels=16, out_channels=3, kernel_size=3, stride=2, padding=2, output_padding=1)
+        self.depool2 = nn.MaxUnpool2d(2, stride=2)
+
+        self.batchNorm0 = nn.BatchNorm2d(3)
+        self.deconv3 = nn.ConvTranspose2d(in_channels=3, out_channels=1, kernel_size=3, stride=1, padding=1)
+            
     def forward(self, input):
-        pass
+        # Encode
+        x1 = self.conv1(input)
+        x2 = self.batchNorm1(x1)
+        x3 = F.relu(x2)
+        x4, indices = self.pool1(x3)
+
+        x5 = self.conv2(x4)
+        x6 = self.batchNorm2(x5)
+        x7 = F.relu(x6)
+        x8, indices2 = self.pool2(x7)
+        # print("After pool & relu: ", x.shape) # x is now a tuple - because MaxPool2d returns x, indices (required for MaxUnpool2d)
+
+        x = self.depool2(x8, indices=indices2)
+        x = self.batchNorm2(x)
+        x = self.deconv1(x+x5)
+        
+        x = self.depool(x, indices=indices)
+        x = self.batchNorm1(x)
+        x = self.deconv2(x + x1)
+
+        x = self.batchNorm0(x)
+        x = self.deconv3(x + input)
+
+        # x = torch.sigmoid(x)
+
+        return x
