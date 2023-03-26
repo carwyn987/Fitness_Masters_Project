@@ -1,14 +1,14 @@
-RINDNet/data
-RINDNet/
-Mask_RCNN/samples/coco/annotations/
+Experimental/RINDNet/data
+Experimental/RINDNet/
+Experimental/Mask_RCNN/samples/coco/annotations/
 
 # LabPicVision
-Test/LapPicVision/Data/
-Test/LapPicVision/LabPicsV1.zip
-Test/LapPicVision/Data/
-Test/LapPicVision/models/
+Experimental/Test/LapPicVision/Data/
+Experimental/Test/LapPicVision/LabPicsV1.zip
+Experimental/Test/LapPicVision/Data/
+Experimental/Test/LapPicVision/models/
 
 # Media
-Media/07_31_22_Back_Thermal_Videos/
+Experimental/Media/07_31_22_Back_Thermal_Videos/
 
-Custom_Segmentation/src/__pycache__/
+Experimental/Custom_Segmentation/src/__pycache__/

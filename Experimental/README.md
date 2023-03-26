@@ -185,6 +185,10 @@ pip install h5py==2.10.0
 
 pip3 install imgaug
 sudo apt-get install python3-tk
+
+pip install flask requests
+conda install -c conda-forge uwsgi
+
 ```
 
 ## Commands to Run:
