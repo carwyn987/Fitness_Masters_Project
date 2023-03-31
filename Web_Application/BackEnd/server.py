@@ -9,6 +9,11 @@ CORS(app)
 def get_secret_message():
     return SECRET_MESSAGE
 
+@app.route("/gaussian")
+def get_gaussian_blur(image):
+    print("GOT GAUSSIAN !!!!!")
+    return image
+
 '''
 To make this work with a separate web server (i.e. the one in web_client), I needed to turn of CORS so that the cross-domain request would pass.
 To achieve this, I added the "from flask_cors import CORS" and "CORS(app)" lines.

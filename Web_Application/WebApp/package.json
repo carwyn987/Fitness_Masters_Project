@@ -1,0 +1,24 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carwyn987/Fitness_Masters_Project.git"
+  },
+  "author": "Carwyn Collinsworth",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carwyn987/Fitness_Masters_Project/issues"
+  },
+  "homepage": "https://github.com/carwyn987/Fitness_Masters_Project#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "stream": "^0.0.2"
+  }
+}

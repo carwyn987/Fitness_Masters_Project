@@ -35,11 +35,39 @@ conda install -n hypertrophy-app ipykernel --update-deps --force-reinstall
 ```
 pip install flask requests
 conda install -c conda-forge uwsgi
-
+pip install -U flask-cors
+sudo apt install nodejs       #v12.22.9
+sudo apt install npm          #8.5.1
 ```
 
-## Commands to Run:
-
+5. Optional Installation:
+```
+sudo add-apt-repository ppa:wireshark-dev/stable
+sudo apt-get update
+sudo apt-get install wireshark
+sudo wireshark
 ```
 
+# To Run Application:
+
+## To Start BackEnd:
+
+By running the command:
 ```
+uwsgi --http-socket 127.0.0.1:5683 --mount /=server:app
+```
+in the BackThe server will be started up to handle requests. Uwsgi starts up a web server with a single process and a single thread.
+
+The server is likely hosted from the address / port combination: http://localhost:5683/
+
+## To Start FrontEnd:
+
+Run
+```
+npm start
+```
+In WebApp folder.
+
+View web application at http://localhost:8080/index.html
+
+Setup via instructions at https://www.section.io/engineering-education/static-site-dynamic-nodejs-web-app/ 
