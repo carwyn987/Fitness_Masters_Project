@@ -1,6 +1,6 @@
 # RESTFul API Review:
 
-## Source:
+### Source:
  - https://realpython.com/api-integration-in-python/
 
  REST - Representational State Transfer. A software style that defines a pattern for client and server communcation over network.
@@ -45,4 +45,3 @@ HTTP Response Codes:
  - 400 - Bad request
  - 415 - Unsupported media type
  - 500 - Server error
-
