@@ -10,8 +10,11 @@ Experimental/Test/LapPicVision/models/
 
 # Media
 Experimental/Media/07_31_22_Back_Thermal_Videos/
-
 Experimental/Custom_Segmentation/src/__pycache__/
 
 # Node modules
 Web_Application/WebApp/node_modules/*
+Web_Application/sample_applications/WebApp/node_modules/*
+
+# PyCache
+Web_Application/BackEnd/__pycache__/*
