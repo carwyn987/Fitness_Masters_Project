@@ -8,10 +8,10 @@
         <script src="main.js"></script>
     </head>
     <body>
-        <form accept="file_extension|image/*">
+        <form accept="file_extension|image/*" method="post" enctype="multipart/form-data">
             <label for="img">Select image:</label>
             <input type="file" id="img" name="img" accept="image/*">
-          </form>
-          <br><img id="myImg" src="#">
+        </form>
+        <br><img id="myImg" src="#">
     </body>
 </html>
