@@ -19,7 +19,6 @@ window.addEventListener('load', function() {
                 // var blurred_image = make_gaussian_blur_request(data)
                 img.src = URL.createObjectURL(this.files[0]); // set src to blob url
 
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 // create a new FormData object
                 const formData = new FormData();
 
@@ -54,12 +53,13 @@ window.addEventListener('load', function() {
                 .then(response => {
                 // handle the server response
                 console.log('Server response:', response);
+                response.text().then(body => console.log(body));
+
                 })
                 .catch(error => {
                 // handle the error
                 console.error('Error:', error);
                 });
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             })            
         }
     });
