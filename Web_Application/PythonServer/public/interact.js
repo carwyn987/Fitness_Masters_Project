@@ -53,8 +53,37 @@ window.addEventListener('load', function() {
                 .then(response => {
                 // handle the server response
                 console.log('Server response:', response);
-                response.text().then(body => console.log(body));
+                response.text().then(body => {
+                    console.log(body)
 
+                    const byteArray = new Uint8Array(body.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+                    const arrayBuffer = new ArrayBuffer(byteArray.length);
+                    const bufferView = new Uint8Array(arrayBuffer);
+                    bufferView.set(byteArray);
+
+                    // Create a new DataView object to read the JFIF data
+                    const jfifDataView = new DataView(arrayBuffer);
+
+                    // Check that the data starts with the JFIF header
+                    if (jfifDataView.getUint16(0, false) !== 0xffd8 || jfifDataView.getUint16(2, false) !== 0xffe0 || jfifDataView.getUint8(4) !== 0x4a || jfifDataView.getUint8(5) !== 0x46 || jfifDataView.getUint8(6) !== 0x49 || jfifDataView.getUint8(7) !== 0x46 || jfifDataView.getUint8(8) !== 0x00) {
+                    console.error('Input data is not a valid JFIF file');
+                    return;
+                    }
+
+                    // Extract the JPEG data from the JFIF file
+                    const jpegData = body.slice(20);
+
+                    // Save the JPEG data to a new file with the ".jpg" extension
+                    const blob = new Blob([jpegData], {type: 'image/jpeg'});
+                    const url = URL.createObjectURL(blob);
+                    img.src = url
+
+                    // var imgsrc = "data:image/jpg;base64," + btoa(body)
+                    // img.src = imgsrc
+
+                    console.log(fileInput.src)
+                });
+                
                 })
                 .catch(error => {
                 // handle the error
