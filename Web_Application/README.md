@@ -38,6 +38,8 @@ conda install -c conda-forge uwsgi
 pip install -U flask-cors
 sudo apt install nodejs       #v12.22.9
 sudo apt install npm          #8.5.1
+
+pip3 install -r requirements.txt
 ```
 
 5. Optional Installation:

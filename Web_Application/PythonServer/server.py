@@ -13,18 +13,11 @@ def index():
 def upload_image():
     print(request.files)
     # check if the request contains a file
-    # if 'image' not in request.files:
-    #     return 'No image file provided', 400
-    # print("!!!!!!!!!!!!!!!!")
-
-    # # get the file from the request and save it to disk
-    # file = request.files['image']
-    # file.save('image.png')
+    if 'image' not in request.files:
+        return 'No image file provided', 400
 
     file = request.files['image']
-    print("TYPE OF FILE: ", type(file))
-    # file.save('abcd3.jpeg')
-
+    
     # Get image from BytesIO
     in_memory_file = io.BytesIO()
     file.save(in_memory_file)
@@ -35,25 +28,9 @@ def upload_image():
     # Blur image
     kernel = np.ones((10,10),np.float32)/100
     img = cv2.filter2D(img,-1,kernel)
-    img = cv2.imread('abcd3.png')
-    # img[100:200, 100:200, :] = 1
-
-    # Get BytesIO from image
-    ret, data = cv2.imencode('.jpg', img, [cv2.IMWRITE_JPEG_QUALITY, 90]) # ret is if the operation was successful
-    print("Was the encoding data operation successful?: ", ret)
-    d = data.tostring() # back to bytes
-    # d = io.BytesIO(data).getvalue() #.decode("utf-8")
-    # d = str(np.array(data).tobytes())
-    print(d)
 
     # return a response to indicate success
-    # return 'Image file uploaded successfully', 200
-    r = Response(response=d,
-                    status=200,
-                    mimetype="application/json")
-    r.data = d
-    return r
-
+    return 'Image file uploaded successfully', 200
 
 if __name__ == '__main__':
     app.run()
