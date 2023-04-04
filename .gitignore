@@ -20,3 +20,4 @@ Web_Application/sample_applications/WebApp/node_modules/*
 Web_Application/BackEnd/__pycache__/*
 Web_Application/PythonServer/__pycache__/*
 Web_Application/PythonServer/__pycache__/server.cpython-37.pyc
+__pycache__/
