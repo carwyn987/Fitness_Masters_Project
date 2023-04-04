@@ -2,6 +2,7 @@ from flask import Flask, request, Response, send_file
 import io
 import numpy as np
 import cv2
+import base64
 
 app = Flask(__name__, static_folder='public', static_url_path='/')
 
@@ -29,8 +30,15 @@ def upload_image():
     kernel = np.ones((10,10),np.float32)/100
     img = cv2.filter2D(img,-1,kernel)
 
+    # Get encoding
+    retval, buffer = cv2.imencode('.jpg', img)
+    if not retval: print("The image encoding failed!")
+    jpg_as_text = base64.b64encode(buffer)
+
     # return a response to indicate success
-    return 'Image file uploaded successfully', 200
+    # return 'Image file uploaded successfully', 200
+    return Response(response=jpg_as_text,
+                    status=200)
 
 if __name__ == '__main__':
     app.run()

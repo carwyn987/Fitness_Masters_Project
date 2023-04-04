@@ -32,6 +32,11 @@ window.addEventListener('load', function() {
                 })
                 .then(response => {
                     console.log('Server response:', response);
+                    response.text().then(function(body) {
+                        console.log(body); // this will be a string
+                        img.src = "data:image/png;base64, " + body
+                      }
+                    )
                 })
                 .catch(error => {
                     console.error('Error:', error);
