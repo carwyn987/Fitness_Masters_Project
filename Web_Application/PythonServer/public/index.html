@@ -8,10 +8,28 @@
         <script src="main.js"></script>
     </head>
     <body>
-        <form accept="file_extension|image/*" method="post" enctype="multipart/form-data">
-            <label for="img">Select image:</label>
-            <input type="file" id="img" name="img" accept="image/*">
-        </form>
+        <div id="inputs">
+            <form accept="file_extension|image/*" method="post" enctype="multipart/form-data">
+                <label for="img">Select image 1:</label>
+                <input type="file" id="img" name="img" accept="image/*">
+            </form>
+            <form accept="file_extension|image/*" method="post" enctype="multipart/form-data">
+                <label for="img">Select image 2:</label>
+                <input type="file" id="img2" name="img" accept="image/*">
+            </form>
+            <form accept="file_extension|image/*" method="post" enctype="multipart/form-data">
+                <label for="img">Select thermal image 1:</label>
+                <input type="file" id="t_img1" name="img" accept="image/*">
+            </form>
+            <form accept="file_extension|image/*" method="post" enctype="multipart/form-data">
+                <label for="img">Select thermal image 2:</label>
+                <input type="file" id="t_img2" name="img" accept="image/*">
+            </form>
+        </div>
+        <div class="submit">
+            <button type="button">Submit for Processing!</button>
+            <!-- Progress bar goes here -->
+        </div>
         <br><img id="myImg" src="#">
     </body>
 </html>

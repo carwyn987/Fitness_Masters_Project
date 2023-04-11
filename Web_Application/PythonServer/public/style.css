@@ -19,3 +19,14 @@
 .button_style_1:active {
     box-shadow: inset -2px -2px 3px rgba(255, 255, 255, 0.6), inset 2px 2px 3px rgba(0, 0, 0, 0.6);
 }
+
+#inputs {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+form {
+    display: table-cell;
+    text-align: center;
+}
