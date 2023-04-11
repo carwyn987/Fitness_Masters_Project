@@ -1,14 +1,28 @@
-from flask import Flask, request, Response, send_file
+from flask import Flask, request, Response
 import io
 import numpy as np
 import cv2
 import base64
+
+from process import processMain
 
 app = Flask(__name__, static_folder='public', static_url_path='/')
 
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
+
+
+def loadImg(imgName):
+    file1 = request.files[imgName]
+    
+    # Get image from BytesIO
+    in_memory_file = io.BytesIO()
+    file1.save(in_memory_file)
+    data = np.fromstring(in_memory_file.getvalue(), dtype=np.uint8)
+    color_image_flag = 1
+    img = cv2.imdecode(data, color_image_flag)
+    return img
 
 @app.route('/upload-image', methods=['POST'])
 def upload_image():
@@ -17,18 +31,13 @@ def upload_image():
     if 'image' not in request.files:
         return 'No image file provided', 400
 
-    file = request.files['image']
-    
-    # Get image from BytesIO
-    in_memory_file = io.BytesIO()
-    file.save(in_memory_file)
-    data = np.fromstring(in_memory_file.getvalue(), dtype=np.uint8)
-    color_image_flag = 1
-    img = cv2.imdecode(data, color_image_flag)
+    img1 = loadImg('image')
+    img2 = loadImg('image2')
+    t_img1 = loadImg('t_img1')
+    t_img2 = loadImg('t_img2')
 
-    # Blur image
-    kernel = np.ones((10,10),np.float32)/100
-    img = cv2.filter2D(img,-1,kernel)
+    # processing
+    img = processMain(img1, img2, t_img1, t_img2)
 
     # Get encoding
     retval, buffer = cv2.imencode('.jpg', img)

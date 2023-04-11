@@ -1,11 +1,12 @@
-window.addEventListener('load', function() {
+import { sendImgs } from './comm.js'
 
+window.addEventListener('load', function() {
     // Adding event listener to the submit button
     document.getElementById('submit').addEventListener('click', function(event) {
         console.log("submit button clicked")
         event.preventDefault();
         const img = document.getElementById('img');
-        const img_out = document.getElementById('img_out');
+        
         if (img.files && img.files[0]) {
             img.onload = () => {
                 URL.revokeObjectURL(img.src);  // no longer needed, free memory
@@ -15,34 +16,12 @@ window.addEventListener('load', function() {
             reader.readAsDataURL(img.files[0]);
             // Wait for data to load, and then call blur request and set image
             reader.addEventListener('load', (e) => {
-
-                const formData = new FormData();
-                const fileInput = document.querySelector('#img');
-                formData.append('image', fileInput.files[0]);
-
-                // make the fetch request with streaming
-                fetch('/upload-image', {
-                    method: 'POST',
-                    body: formData,
-                    // Set the "onUploadProgress" callback to track the upload progress "onUploadProgress" will be called multiple times during the upload with the "event" object containing the "loaded" and "total" properties
-                    stream: true,
-                    onUploadProgress: function(event) {
-                        const progress = (event.loaded / event.total) * 100;
-                        console.log(`Upload progress: ${progress.toFixed(2)}%`);
-                    }
-                })
-                .then(response => {
-                    console.log('Server response:', response);
-                    response.text().then(function(body) {
-                        console.log("BODY: ", body); // this will be a string
-                        img_out.src = "data:image/png;base64, " + body
-                      }
-                    )
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                const img_out = document.getElementById('img_out');
+                sendImgs(img_out)
             })            
+        }else{
+            alert("Missing image 1! Submission cancelled.")
+            return
         }
     });
 
