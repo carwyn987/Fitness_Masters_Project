@@ -30,3 +30,8 @@ form {
     display: table-cell;
     text-align: center;
 }
+
+.in_imgs {
+    padding-top: 10%;
+    max-width: 80%;
+}

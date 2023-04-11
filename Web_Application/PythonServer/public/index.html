@@ -3,33 +3,39 @@
     <head>
         <title>Test1 Webpage Title</title>
         <link rel="stylesheet" href="style.css">
-        <script type="module" src="requests.js"></script>
         <script type="module" src="interact.js"></script>
-        <script src="main.js"></script>
     </head>
     <body>
         <div id="inputs">
             <form accept="file_extension|image/*" method="post" enctype="multipart/form-data">
                 <label for="img">Select image 1:</label>
                 <input type="file" id="img" name="img" accept="image/*">
+                <br>
+                <img id="in_img_1" class="in_imgs" src="#">
             </form>
             <form accept="file_extension|image/*" method="post" enctype="multipart/form-data">
                 <label for="img">Select image 2:</label>
                 <input type="file" id="img2" name="img" accept="image/*">
+                <br>
+                <img id="in_img_2" class="in_imgs" src="#">
             </form>
             <form accept="file_extension|image/*" method="post" enctype="multipart/form-data">
                 <label for="img">Select thermal image 1:</label>
                 <input type="file" id="t_img1" name="img" accept="image/*">
+                <br>
+                <img id="in_img_3" class="in_imgs" src="#">
             </form>
             <form accept="file_extension|image/*" method="post" enctype="multipart/form-data">
                 <label for="img">Select thermal image 2:</label>
                 <input type="file" id="t_img2" name="img" accept="image/*">
+                <br>
+                <img id="in_img_4" class="in_imgs" src="#">
             </form>
         </div>
         <div class="submit">
-            <button type="button">Submit for Processing!</button>
+            <button id="submit" type="button">Submit for Processing!</button>
             <!-- Progress bar goes here -->
         </div>
-        <br><img id="myImg" src="#">
+        <br><img id="img_out" src="#">
     </body>
 </html>
