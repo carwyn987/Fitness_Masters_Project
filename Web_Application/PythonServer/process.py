@@ -2,6 +2,7 @@ import numpy as np
 import subprocess
 import os
 import cv2
+import glob
 
 def processMain(img1, img2, t_img1, t_img2):
 
@@ -17,10 +18,6 @@ def processMain(img1, img2, t_img1, t_img2):
     cv2.imwrite(save_dir + t1, t_img1)
     cv2.imwrite(save_dir + t2, t_img2)
 
-    # Blur image
-    kernel = np.ones((10,10),np.float32)/100
-    img = (img1[0:400, 0:400, :] + img2[0:400, 0:400, :])/2 # cv2.filter2D(img,-1,kernel) # blur image
-
     # Change directory to experimental
     relative_pth = '../../Experimental/pipeline/'
     undo_pth = '../../Web_Application/PythonServer/'
@@ -33,5 +30,10 @@ def processMain(img1, img2, t_img1, t_img2):
 
     # Get the image back
     img = cv2.imread("out/output.png")
+
+    # Make stateless by deleting temp_media folder contents
+    files = glob.glob(undo_pth + save_dir + "*")
+    for f in files:
+        os.remove(f)
 
     return img
