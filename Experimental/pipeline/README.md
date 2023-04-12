@@ -5,6 +5,10 @@ To run, use the following bash file command:
 `
 ./hypertrophy_insight.sh -f '../Media/Images/original_leg_day/' -i 'FLIR_20220906_104014_048-Visual.jpeg' -j 'FLIR_20220906_103225_633-Visual.jpeg' -t 'FLIR_20220906_104014_048.jpg' -u 'FLIR_20220906_103225_633.jpg' -o 'out/'
 `
+may need to ask  
+```
+-m '../Test/LapPicVision/models/full_custom_dataset_p_0.25_25000.torch'
+```
 
 Keep in mind that img1 and thermal1 (i.e. -i and -t) should reference the after images in the set of {before, after, beforethermal, afterthermal}.
 

@@ -52,6 +52,7 @@ def Save(imageName, outfolder, height_orgin, widh_orgin, prd):
 
     # plt.savefig(outfolder + "Mask_" + imageName)
     plt.close()
+    print("WRITING TO ", outfolder + "Mask_" + imageName)
     cv2.imwrite(outfolder + "Mask_" + imageName, seg)
     
 

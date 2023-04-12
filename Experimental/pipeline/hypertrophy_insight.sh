@@ -21,8 +21,8 @@ echo "Thermal Image 2: $thermal2";
 echo "Out Folder: $outfolder"
 
 # Run images through model to get segmented view
-python3 segment.py -folder "$folder" -image "$img1" -outfolder "$outfolder" -model "$folder"
-python3 segment.py -folder "$folder" -image "$img2" -outfolder "$outfolder" -model "$folder"
+python3 segment.py -folder "$folder" -image "$img1" -outfolder "$outfolder" -model "$model"
+python3 segment.py -folder "$folder" -image "$img2" -outfolder "$outfolder" -model "$model"
 
 # Model example: "../Test/LapPicVision/models/custom_dataset_p_0.25_25000.torch"
 
@@ -34,7 +34,6 @@ echo "Mask 1: $mask1"
 echo "Mask 2: $mask2"
 
 # Now that we have segmented images, run deformation script to edge find, and scale.
-# python3 deform.py -img1 "../Deformation_Matching/sample_images/PXL_20230208_042455615.jpg" -mask1 "../Deformation_Matching/sample_images/PXL_20230208_042455615_mask.jpg" -img2 "../Deformation_Matching/sample_images/PXL_20230208_042446197.jpg" -mask2 "../Deformation_Matching/sample_images/PXL_20230208_042446197_mask.jpg" -out "$outfolder" -thermal1 "$folder$thermal1" -thermal2 "$folder$thermal2"
 python3 deform.py -img1 "$folder$img1" -mask1 "$mask1" -img2 "$folder$img2" -mask2 "$mask2" -out "$outfolder" -thermal1 "$folder$thermal1" -thermal2 "$folder$thermal2"
 
 # Need to improve the algorithm and mask training. It introduces artifacts to the thermal image, especially when masking is incomplete.
