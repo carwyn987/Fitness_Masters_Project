@@ -1,3 +1,5 @@
+import { move } from './progress_bar.js'
+
 function sendImgs(img_out){
     const formData = new FormData();
 
@@ -28,6 +30,8 @@ function sendImgs(img_out){
         alert("Missing thermal image 2! Submission cancelled.")
         return
     }
+
+    move()
 
     // make the fetch request with streaming
     fetch('/upload-image', {

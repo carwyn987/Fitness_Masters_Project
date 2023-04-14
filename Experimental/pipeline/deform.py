@@ -11,7 +11,7 @@ import skimage
 def dist(t1, t2):
     return ((t1[0] - t2[0])**2 + (t1[1] - t2[1])**2)**0.5
 
-def loadImgs(image_1_path, mask_1_path, thermal_1_path, image_2_path, mask_2_path, thermal_2_path):
+def loadImgs(image_1_path, mask_1_path, thermal_1_path, image_2_path, mask_2_path, thermal_2_path, show):
     img1 = cv2.imread(image_1_path)
     mask1 = cv2.imread(mask_1_path)
     thermal1 = cv2.imread(thermal_1_path)
@@ -28,9 +28,10 @@ def loadImgs(image_1_path, mask_1_path, thermal_1_path, image_2_path, mask_2_pat
                                           cv2.resize(np.concatenate((thermal1,thermal2), axis=1), (img1.shape[1]//scx, img1.shape[0]//scy))
                                         ), axis=0)
 
-    cv2.imshow('images', concat_img)
-    cv2.waitKey(1500)
-    cv2.destroyAllWindows()
+    if show:
+        cv2.imshow('images', concat_img)
+        cv2.waitKey(1500)
+        cv2.destroyAllWindows()
     cv2.imwrite(out + "loaded_images.png", concat_img)
 
     return (img1, mask1, thermal1, img2, mask2, thermal2)
@@ -232,7 +233,7 @@ https://scikit-image.org/docs/stable/api/skimage.transform.html#skimage.transfor
 https://scikit-image.org/docs/dev/auto_examples/transform/plot_piecewise_affine.html
 https://mail.python.org/pipermail/scikit-image/2016-July/004783.html
 """
-def meshDeform(img2, center, m1_edge_pts, m2_edge_pts, thermal2, fileName, fileNameThermal):
+def meshDeform(img2, center, m1_edge_pts, m2_edge_pts, thermal2, fileName, fileNameThermal, show):
     # Take a sample of the edge point pairs
     sample_size = 30
     sample_src = []
@@ -268,9 +269,12 @@ def meshDeform(img2, center, m1_edge_pts, m2_edge_pts, thermal2, fileName, fileN
     print("range: ", out.min(), ", ", out.max())
     print("range img2: ", img2.min(), ", ", img2.max())
 
-    cv2.imshow("warped mesh image", np.concatenate((img2*255, out), axis=1))
-    cv2.waitKey(1000)
-    cv2.destroyAllWindows()
+    if show:
+
+        cv2.imshow("warped mesh image", np.concatenate((img2*255, out), axis=1))
+        cv2.waitKey(1000)
+        cv2.destroyAllWindows()
+    
     cv2.imwrite(fileName, out)
     cv2.imwrite(fileNameThermal, out_thermal)
 
@@ -319,8 +323,10 @@ if __name__ == "__main__":
     parser.add_argument('-out')
     parser.add_argument('-thermal1')
     parser.add_argument('-thermal2')
+    parser.add_argument('-show')
 
     args = parser.parse_args()
+    args.show = int(args.show)
 
     image_1_path = args.img1
     mask_1_path = args.mask1
@@ -329,11 +335,12 @@ if __name__ == "__main__":
     thermal_1_path = args.thermal1
     thermal_2_path = args.thermal2
     out = args.out
+    show = args.show
 
     print("Loading images from sources\n   (1)", image_1_path, "\n   (2)", mask_1_path, "\n   (3)", image_2_path, "\n   (4)", mask_2_path, "\n   (5)", thermal_1_path, "\n   (6)", thermal_2_path)
     print("Out folder: ", out)
 
-    img1, mask1, thermal1, img2, mask2, thermal2 = loadImgs(image_1_path, mask_1_path, thermal_1_path, image_2_path, mask_2_path, thermal_2_path)
+    img1, mask1, thermal1, img2, mask2, thermal2 = loadImgs(image_1_path, mask_1_path, thermal_1_path, image_2_path, mask_2_path, thermal_2_path, show)
     img1, mask1, thermal1, img2, mask2, thermal2 = resizeImgs(img1, mask1, thermal1, img2, mask2, thermal2, out)
     assert img1.shape == mask1.shape
     assert img2.shape == mask2.shape
@@ -361,7 +368,7 @@ if __name__ == "__main__":
     # cv2Deform(img1.copy(), center, m1_edge_pts, m2_edge_pts, thermal1.copy(), out + "deformed_" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])
     
     # Best (mesh warp) Scaling Method
-    meshDeform(img1.copy(), center, m1_edge_pts, m2_edge_pts, thermal1.copy(), out + "deformed__" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1])
+    meshDeform(img1.copy(), center, m1_edge_pts, m2_edge_pts, thermal1.copy(), out + "deformed__" + image_1_path.split('/')[-1], out + "thermal_deformed_" + thermal_1_path.split('/')[-1], show)
     
     
     # Try this: https://open.win.ox.ac.uk/pages/fsl/fslpy/fsl.transform.nonlinear.html#fsl.transform.nonlinear.DeformationField.__init__

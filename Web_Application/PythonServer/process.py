@@ -24,7 +24,7 @@ def processMain(img1, img2, t_img1, t_img2):
     os.chdir(relative_pth)
 
     # Using the correct conda environment, run the script to process images, and create output image.
-    run_cmd = f"./hypertrophy_insight.sh -f {undo_pth + save_dir} -i {i1} -j {i2} -t {t1} -u {t2} -o {undo_pth + save_dir}  -m '../Test/LapPicVision/models/full_custom_dataset_p_0.25_25000.torch'"
+    run_cmd = f"./hypertrophy_insight.sh -f {undo_pth + save_dir} -i {i1} -j {i2} -t {t1} -u {t2} -o {undo_pth + save_dir} -m '../Test/LapPicVision/models/full_custom_dataset_p_0.25_25000.torch' -s 0"
     cmd = f'. /home/carwyn/anaconda3/etc/profile.d/conda.sh && conda activate hypertrophy && conda list && {run_cmd}' 
     subprocess.run(cmd, shell=True, executable='/bin/bash')
 

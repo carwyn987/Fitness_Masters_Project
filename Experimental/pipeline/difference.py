@@ -42,18 +42,19 @@ def computeDif(thermal1, thermal2):
 
     return res
 
-def computeDifference(thermal1, thermal2, out):
+def computeDifference(thermal1, thermal2, out, show):
     compare = np.concatenate((thermal1, np.zeros((thermal1.shape[0],40,3)), thermal2), axis=1)
     difImg = thermal1 - thermal2
     # difImg = computeDif(thermal1, thermal2)
     
-    cv2.imshow("Compare Images", compare)
-    cv2.waitKey(1500)
-    cv2.destroyAllWindows()
+    if show:
+        cv2.imshow("Compare Images", compare)
+        cv2.waitKey(1500)
+        cv2.destroyAllWindows()
 
-    cv2.imshow("Difference Image", difImg)
-    cv2.waitKey(15000)
-    cv2.destroyAllWindows()
+        cv2.imshow("Difference Image", difImg)
+        cv2.waitKey(15000)
+        cv2.destroyAllWindows()
 
     cv2.imwrite(out + "comparison.png", compare)
     cv2.imwrite(out + "output.png", difImg)
@@ -65,9 +66,11 @@ if __name__ == '__main__':
     parser.add_argument('-thermal1')
     parser.add_argument('-thermal2')
     parser.add_argument('-out')
+    parser.add_argument('-show')
 
     args = parser.parse_args()
+    args.show = int(args.show)
 
     thermal1, thermal2 = load(args.thermal1, args.thermal2)
     # scale(thermal1, thermal2)
-    difImg = computeDifference(thermal1, thermal2, args.out)
+    difImg = computeDifference(thermal1, thermal2, args.out, args.show)
