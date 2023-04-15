@@ -10,7 +10,7 @@ function move() {
         clearInterval(id);
         i = 0;
       } else {
-        width+=0.03666;
+        width+=0.03;
         elem.style.width = width + "%";
       }
     }
