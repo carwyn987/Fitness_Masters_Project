@@ -62,7 +62,7 @@ in the BackThe server will be started up to handle requests. Uwsgi starts up a w
 
 The server is likely hosted from the address / port combination: http://localhost:5683/
 
-## To Start FrontEnd:
+<!-- ## To Start FrontEnd:
 
 Run
 ```
@@ -72,4 +72,4 @@ In WebApp folder.
 
 View web application at http://localhost:8080/index.html
 
-Setup via instructions at https://www.section.io/engineering-education/static-site-dynamic-nodejs-web-app/ 
+Setup via instructions at https://www.section.io/engineering-education/static-site-dynamic-nodejs-web-app/  -->

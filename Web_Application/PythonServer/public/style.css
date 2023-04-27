@@ -1,4 +1,5 @@
-.button_style_1 {
+/* MY ORIGINAL CODE */
+/* .button_style_1 {
     border: 0;
     line-height: 2.5;
     padding: 0 20px;
@@ -45,4 +46,144 @@ form {
     width: 1%;
     height: 30px;
     background-color: green;
+} */
+
+/* ChatGPT BEAUTIFIED WEBSITE CSS */
+/* Prompt: "Make this webpage beautified, i.e. not the code itself, but the look and feel of the website: ..." */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#inputs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+form {
+    margin: 20px;
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="file"] {
+    display: block;
+    margin: 10px auto;
+}
+
+.in_imgs {
+    margin-top: 20px;
+    max-width: 300px;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+#submit {
+    border: none;
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#submit:hover {
+    background-color: #ff6666;
+}
+
+#myProgress {
+    width: 100%;
+    background-color: #ddd;
+    margin: 20px;
+}
+
+#myBar {
+    width: 1%;
+    height: 30px;
+    background-color: #4caf50;
+}
+
+#img_out {
+    display: block;
+    margin: 20px auto;
+    max-width: 500px;
+    max-height: 500px;
+    object-fit: contain;
+}
+
+#inputs {
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+#submit {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#submit:hover {
+    background-color: #3e8e41;
+}
+
+#inputs {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 20px;
+}
+
+form {
+    margin: 20px;
+    text-align: center;
+    flex-basis: calc(50% - 40px);
+    max-width: 300px;
+}
+
+.in_imgs {
+    margin-top: 20px;
+    max-width: 100%;
+    max-height: 200px
 }
