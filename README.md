@@ -143,11 +143,28 @@ In the scenario that this information is presented to you after a set of leg ext
 
 <br><br>
 
-## Next Steps: (02/27/23)
 
-* Check out other 2D deformation image matching algorithms that will not cause artifacts to be generated.
-  * Research "Triangulated Surface Mesh Deformation"
-* Web server with RESTFul interface, python application (Flask)
+## Putting it all together - Web Application
+
+A web server was created via the Flask web framework. The application serves the public directory files to any endpoint user, and the python server handles requests, sending appropriately formatted images to the 'production' experimental scripts to compute the thermal difference image, and finally returning it to the user.
+
+Images of the application interface are shown below:
+
+<figure style="margin-left: auto;
+  margin-right: auto; width: 90%; display: block;">
+    <img
+    src="Web_Application/media/s1.png?raw=true"
+    alt="Application.">
+    <figcaption>Figure 10: Application after images are set as input</figcaption>
+</figure><br>
+
+<figure style="margin-left: auto;
+  margin-right: auto; width: 90%; display: block;">
+    <img
+    src="Web_Application/media/s2.png?raw=true"
+    alt="Application 2.">
+    <figcaption>Figure 11: Application after processing</figcaption>
+</figure><br>
 
 ## References for Project Construction:
 
