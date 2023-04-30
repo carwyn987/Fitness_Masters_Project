@@ -12,7 +12,7 @@ It also provides a unified interface for tracking gym progress.
 <figure style="margin-left: auto;
   margin-right: auto; width: 100%; display: block;">
     <img
-    src="Media/UML/overview.svg?raw=true"
+    src="Experimental/Media/UML/overview.svg?raw=true"
     alt="Planning Page">
     <figcaption>Figure 1: Project data flow.</figcaption>
 </figure><br>
@@ -34,7 +34,7 @@ See the top and bottom set of images in Figure 2. These are the 'Camera Images' 
 <figure style="margin-left: auto;
   margin-right: auto; width: 50%; display: block;">
     <img
-    src="Media/UML/loaded_images.png?raw=true"
+    src="Experimental/Media/UML/loaded_images.png?raw=true"
     alt="Raw, Segmented, and Thermal Images." width="100%">
     <figcaption>Figure 2: Input images (raw and thermal) and segmented images (middle row).</figcaption>
 </figure><br>
@@ -60,7 +60,7 @@ Using the computed segmentation maps, naive outlines were computed using an expa
 <figure style="margin-left: auto;
   margin-right: auto; width: 50%; display: block;">
     <img
-    src="Media/UML/edgeandcentercomputation.png?raw=true"
+    src="Experimental/Media/UML/edgeandcentercomputation.png?raw=true"
     alt="Polar edge search theory (row 1), center computation in practice (row 2), and edge computation in practice (row 3).">
     <figcaption>Figure 3: Polar edge search theory (row 1), center computation in practice (row 2), and edge computation in practice (row 3).</figcaption>
 </figure><br>
@@ -72,7 +72,7 @@ A mesh transformation algorithm is the current default. It generates a fantastic
 <figure style="margin-left: auto;
   margin-right: auto; width: 50%; display: block;">
     <img
-    src="Media/UML/thermal_deformed2.jpg?raw=true"
+    src="Experimental/Media/UML/thermal_deformed2.jpg?raw=true"
     alt="Naively transformed raw image.">
     <figcaption>Figure 4: Mesh transformed thermal image.</figcaption>
 </figure><br>
@@ -82,7 +82,7 @@ The old approach was to use naive ray scaling via center and matching edge point
 <figure style="margin-left: auto;
   margin-right: auto; width: 50%; display: block;">
     <img
-    src="Media/UML/visual_deformed.jpeg?raw=true"
+    src="Experimental/Media/UML/visual_deformed.jpeg?raw=true"
     alt="Naively transformed raw image.">
     <figcaption>Figure 5: Naively transformed raw image.</figcaption>
 </figure><br>
@@ -90,7 +90,7 @@ The old approach was to use naive ray scaling via center and matching edge point
 <figure style="margin-left: auto;
   margin-right: auto; width: 50%; display: block;">
     <img
-    src="Media/UML/thermal_deformed.png?raw=true"
+    src="Experimental/Media/UML/thermal_deformed.png?raw=true"
     alt="Naively transformed thermal image.">
     <figcaption>Figure 6: Naively transformed thermal image.</figcaption>
 </figure><br>
@@ -102,7 +102,7 @@ Simply taking the pixel difference between the heatmap thermal images (post-scal
 <figure style="margin-left: auto;
   margin-right: auto; width: 50%; display: block;">
     <img
-    src="Media/UML/dif_img.png?raw=true"
+    src="Experimental/Media/UML/dif_img.png?raw=true"
     alt="Difference thermal image.">
     <figcaption>Figure 7: Difference thermal image.</figcaption>
 </figure><br>
@@ -112,7 +112,7 @@ The improved results after updating the deformation algorithm and difference com
 <figure style="margin-left: auto;
   margin-right: auto; width: 50%; display: block;">
     <img
-    src="Media/UML/dif_img2.png?raw=true"
+    src="Experimental/Media/UML/dif_img2.png?raw=true"
     alt="Difference thermal image.">
     <figcaption>Figure 8: Improved difference thermal image.</figcaption>
 </figure><br>
@@ -124,7 +124,7 @@ This step has not been approached yet, however we can interpret the low quality 
 <figure style="margin-left: auto;
   margin-right: auto; width: 90%; display: block;">
     <img
-    src="Media/UML/insight.png?raw=true"
+    src="Experimental/Media/UML/insight.png?raw=true"
     alt="Insights.">
     <figcaption>Figure 9: Insights. Left image from the Cleveland Clinic: https://my.clevelandclinic.org/health/body/22816-quad-muscles.</figcaption>
 </figure><br>
