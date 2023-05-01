@@ -166,6 +166,16 @@ Images of the application interface are shown below:
     <figcaption>Figure 11: Application after processing</figcaption>
 </figure><br>
 
+<!-- <figure style="margin-left: auto;
+  margin-right: auto; width: 90%; display: block;">
+    <img
+    src="Web_Application/media/web_app_clean.mp4?raw=true"
+    alt="Application 2.">
+    <figcaption>Figure 12: Application running</figcaption>
+</figure><br> -->
+
+[![Demo Application]("Web_Application/media/web_app_clean.gif")]
+
 ## References for Project Construction:
 
 1. https://pyimagesearch.com/2020/07/27/opencv-grabcut-foreground-segmentation-and-extraction/ 
