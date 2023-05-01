@@ -174,7 +174,7 @@ Images of the application interface are shown below:
     <figcaption>Figure 12: Application running</figcaption>
 </figure><br> -->
 
-[![Demo Application]("Web_Application/media/web_app_clean.gif")]
+![Demo Application](/Web_Application/media/web_app_clean.gif)
 
 ## References for Project Construction:
 
